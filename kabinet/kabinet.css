@@ -1,0 +1,141 @@
+/* Кабинет Olymp Pole: те же цвета, что на сайте, крупные кнопки под палец */
+@font-face{font-family:'Manrope';font-weight:400;font-display:swap;src:url(../fonts/manrope-cyrillic-400-normal.woff2) format('woff2');unicode-range:U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Manrope';font-weight:400;font-display:swap;src:url(../fonts/manrope-latin-400-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC,U+2122,U+2190-2199}
+@font-face{font-family:'Manrope';font-weight:600;font-display:swap;src:url(../fonts/manrope-cyrillic-600-normal.woff2) format('woff2');unicode-range:U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Manrope';font-weight:600;font-display:swap;src:url(../fonts/manrope-latin-600-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC,U+2122,U+2190-2199}
+:root{--bg:#14100E;--surface:#1E1815;--surface2:#2A221D;--ink:#F1E7E1;--muted:#B3A39A;--line:rgba(241,231,225,.14);--acc:#D4B07A;--acc-d:#E3C493;--on-acc:#14100E;--acc-soft:#2B231B;--err:#F0907F;--ok:#6CC08A;--ar:#8FA6C9;--ar-soft:#1D232C;--r:8px;--fs:14px;--fm:16px;--ft:20px;--hour:48px}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow-x:clip}
+body{background:var(--bg);color:var(--ink);font:400 var(--fm)/1.5 Manrope,system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:calc(80px + env(safe-area-inset-bottom))}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
+a{color:inherit}
+svg{width:20px;height:20px;flex:none}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+h1{font-size:var(--ft);margin-bottom:16px}
+h2{font-size:var(--ft)}
+.prim{font-size:var(--fs);color:var(--muted)}
+.verh{display:flex;justify-content:space-between;align-items:center;padding:16px;border-bottom:1px solid var(--line)}
+.imya{letter-spacing:.12em;text-transform:uppercase}
+.kto{font-size:var(--fs);color:var(--muted)}
+main{max-width:1180px;margin:0 auto;padding:16px}
+.pusto{padding:48px 0;max-width:48ch}
+.pusto p{color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:8px 24px;border-radius:var(--r);background:var(--acc);color:var(--on-acc);font-weight:600;white-space:nowrap}
+.btn:active{transform:scale(.98)}
+.btn--k{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.btn--opas{background:transparent;color:var(--err);box-shadow:inset 0 0 0 1px rgba(240,144,127,.4)}
+.btn--mal{min-height:40px;padding:8px 16px;font-size:var(--fs)}
+.btn[disabled]{opacity:.5}
+.ssylka{display:inline-flex;align-items:center;min-height:40px;font-size:var(--fs);font-weight:600;color:var(--acc)}
+.kv{display:grid;place-items:center;width:48px;height:48px;border-radius:var(--r);background:var(--surface);font-size:24px;line-height:1}
+.ryad{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap}
+.ryad input{flex:1 1 200px}
+input,select,textarea{width:100%;min-height:48px;padding:8px 16px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);color:var(--ink);font:inherit}
+textarea{min-height:80px}
+input[type=checkbox],input[type=radio]{width:20px;height:20px;min-height:0;accent-color:var(--acc);flex:none;padding:0}
+label{display:block;font-size:var(--fs);font-weight:600;margin:16px 0 8px}
+label.gal{display:flex;align-items:center;gap:8px;font-weight:400;font-size:var(--fm);margin:16px 0 0;min-height:44px}
+.dva{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.dva label{margin-top:16px}
+.dva>*{min-width:0}
+.dva .btn{white-space:normal;padding-inline:16px}
+.oshibka{color:var(--err);font-size:var(--fs);margin-top:8px}
+.knopki{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.knopki .btn{flex:1 1 auto}
+
+/* навигация по дням */
+.nav-den{display:grid;grid-template-columns:48px 1fr 48px;gap:8px;align-items:center;margin-bottom:16px;text-align:center}
+.nav-den b{display:block;font-size:var(--ft)}
+
+/* занятие и записи */
+.zan{margin-bottom:16px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);overflow:hidden}
+.zan-shapka{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:16px;border-bottom:1px solid var(--line)}
+.zan-shapka b{font-size:var(--ft)}
+.zan-shapka span{font-size:var(--fs);color:var(--muted)}
+.zan-shapka .schet{font-weight:600;color:var(--ink);white-space:nowrap}
+.zan.otm{opacity:.72}
+.chel{display:grid;gap:8px;padding:16px;border-bottom:1px solid var(--line)}
+.chel:last-of-type{border-bottom:0}
+.chel-v{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.chel-v b{font-weight:600}
+.chel-v a{font-size:var(--fs);color:var(--muted);text-decoration:none;white-space:nowrap}
+.metki{display:flex;flex-wrap:wrap;gap:4px}
+.mt{display:inline-flex;align-items:center;min-height:24px;padding:0 8px;border-radius:12px;background:var(--surface2);font-size:var(--fs);line-height:1.2}
+.mt.zol{background:var(--acc-soft);color:var(--acc)}
+.mt.ok{color:var(--ok)}
+.mt.err{color:var(--err)}
+.deystviya{display:flex;flex-wrap:wrap;gap:8px}
+.zan-niz{display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:space-between;padding:8px 16px;background:var(--bg)}
+.pustaya{padding:16px;color:var(--muted);font-size:var(--fs)}
+.zal-den{margin-top:24px}
+.zal-den h3{font-size:var(--fs);color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px}
+.zal-den li{list-style:none;padding:8px 0;border-top:1px solid var(--line);font-size:var(--fs)}
+
+/* абонементы */
+.chipy{display:flex;gap:8px;margin-bottom:16px}
+.chip{min-height:40px;padding:0 16px;border-radius:20px;background:var(--surface);font-size:var(--fs);font-weight:600}
+.chip[aria-selected="true"]{background:var(--acc);color:var(--on-acc)}
+.ab{display:grid;gap:8px;width:100%;padding:16px;margin-bottom:8px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);text-align:left}
+.ab-v{display:flex;justify-content:space-between;gap:8px}
+.ab-v b{font-weight:600}
+.ab-v span{font-size:var(--fs);color:var(--muted);white-space:nowrap}
+.ab.neakt{opacity:.6}
+.tochki{display:flex;flex-wrap:wrap;gap:4px}
+.tochki i{width:12px;height:12px;border-radius:50%;border:1px solid var(--acc)}
+.tochki i.z{background:var(--acc)}
+.tochki.kr i{width:20px;height:20px}
+.ab p{font-size:var(--fs);color:var(--muted)}
+.otmetki li{display:flex;justify-content:space-between;align-items:center;gap:8px;list-style:none;padding:8px 0;border-top:1px solid var(--line);font-size:var(--fs)}
+
+/* таблица зала */
+.dni-zal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:16px}
+.dz{display:grid;justify-items:center;min-height:56px;padding:8px 0;border-radius:var(--r);background:var(--surface);font-size:var(--fs)}
+.dz b{font-size:var(--ft);line-height:1.1}
+.dz[aria-selected="true"]{background:var(--acc);color:var(--on-acc)}
+.dz.segodnya:not([aria-selected="true"]){box-shadow:inset 0 0 0 1px var(--acc)}
+.legenda{display:flex;flex-wrap:wrap;gap:8px 16px;margin-bottom:16px;font-size:var(--fs);color:var(--muted)}
+.legenda span{display:inline-flex;align-items:center;gap:8px}
+.lg{width:12px;height:12px;border-radius:2px}
+.lg.gr{box-shadow:inset 0 0 0 2px var(--acc)}
+.lg.pe{background:var(--acc)}
+.lg.ar{background:var(--ar)}
+.setka-zal{display:grid;grid-template-columns:48px 1fr;border-top:1px solid var(--line)}
+.chasy{position:relative}
+.chasy span{display:block;height:var(--hour);font-size:var(--fs);color:var(--muted);transform:translateY(-8px)}
+.kol{position:relative;border-left:1px solid var(--line);display:none}
+.kol.vid{display:block}
+.kol-zag{display:none}
+.yach{display:block;width:100%;height:var(--hour);border-bottom:1px solid var(--line)}
+.yach:hover{background:var(--acc-soft)}
+.blok{position:absolute;left:4px;right:4px;padding:4px 8px;border-radius:4px;font-size:var(--fs);line-height:1.25;overflow:hidden;text-align:left}
+.blok b{display:block;font-weight:600}
+.blok.gr{background:var(--bg);box-shadow:inset 0 0 0 2px var(--acc);color:var(--ink)}
+.blok.pe{background:var(--acc);color:var(--on-acc)}
+.blok.ar{background:var(--ar);color:#0F141B}
+.blok .opl{font-weight:600}
+
+/* окно */
+.okno{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.6)}
+.okno-v{width:min(560px,100%);max-height:92vh;overflow:auto;padding:16px 16px calc(24px + env(safe-area-inset-bottom));background:var(--bg);border:1px solid var(--line);border-radius:16px 16px 0 0}
+.okno-shapka{display:flex;justify-content:space-between;align-items:center;gap:8px;position:sticky;top:-16px;background:var(--bg);padding:8px 0;z-index:1}
+.konflikt{margin-top:16px;padding:16px;border-radius:var(--r);background:#2A1A17;color:var(--err);font-size:var(--fs)}
+
+/* нижнее меню */
+.niz{position:fixed;left:0;right:0;bottom:0;z-index:40;display:grid;grid-template-columns:repeat(4,1fr);padding:0 0 env(safe-area-inset-bottom);background:rgba(20,16,14,.98);border-top:1px solid var(--line)}
+.niz button{display:grid;justify-items:center;gap:4px;min-height:64px;padding:8px 0;font-size:12px;font-weight:600;color:var(--muted)}
+.niz button[aria-current="page"]{color:var(--acc)}
+.tost{position:fixed;left:16px;right:16px;bottom:calc(80px + env(safe-area-inset-bottom));z-index:60;max-width:480px;margin:0 auto;padding:16px;border-radius:var(--r);background:var(--surface2);box-shadow:0 8px 24px rgba(0,0,0,.4);font-size:var(--fs)}
+
+@media (min-width:900px){
+  .okno{align-items:center}
+  .okno-v{border-radius:16px}
+  .dni-zal{display:none}
+  .setka-zal{grid-template-columns:48px repeat(7,1fr)}
+  .kol{display:block}
+  .kol-zag{display:block;position:sticky;top:0;height:40px;padding:8px;text-align:center;font-size:var(--fs);font-weight:600;border-bottom:1px solid var(--line);background:var(--bg);z-index:2}
+  .kol-zag.segodnya{color:var(--acc)}
+  .chasy{padding-top:40px}
+  .zapisi-setka{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+  .zapisi-setka .zan{margin-bottom:0}
+}

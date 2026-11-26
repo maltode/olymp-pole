@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Кабинет Olymp Pole</title>
+<meta name="theme-color" content="#14100E">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="stylesheet" href="kabinet.css">
+</head>
+<body>
+<header class="verh">
+  <b class="imya">Olymp Pole</b>
+  <span class="kto" id="kto">кабинет</span>
+</header>
+
+<main id="ekran">
+  <section id="vhod" class="pusto" hidden>
+    <h1>Кабинет студии</h1>
+    <p>Откройте кабинет из бота студии: кнопка «Кабинет» слева от поля ввода. На компьютере возьмите ссылку в боте: команда «Кабинет».</p>
+  </section>
+
+  <!-- Записи на день -->
+  <section id="t-zapisi" class="vkladka" hidden>
+    <div class="nav-den">
+      <button type="button" class="kv" data-sdvig="-1" aria-label="Предыдущий день">‹</button>
+      <div><b id="den-zag"></b><button type="button" class="ssylka" id="na-segodnya">Сегодня</button></div>
+      <button type="button" class="kv" data-sdvig="1" aria-label="Следующий день">›</button>
+    </div>
+    <div id="den-spisok"></div>
+  </section>
+
+  <!-- Абонементы -->
+  <section id="t-abon" class="vkladka" hidden>
+    <div class="ryad">
+      <input id="abon-poisk" type="search" placeholder="Имя, телефон или номер" aria-label="Поиск абонемента">
+      <button type="button" class="btn" id="abon-novyj">Новый</button>
+    </div>
+    <div class="chipy" role="tablist">
+      <button type="button" class="chip" data-af="act" aria-selected="true">Действующие</button>
+      <button type="button" class="chip" data-af="all" aria-selected="false">Все</button>
+    </div>
+    <div id="abon-spisok"></div>
+  </section>
+
+  <!-- Закрытая таблица зала -->
+  <section id="t-zal" class="vkladka" hidden>
+    <div class="nav-den">
+      <button type="button" class="kv" data-ned="-7" aria-label="Предыдущая неделя">‹</button>
+      <div><b id="ned-zag"></b><button type="button" class="ssylka" id="ned-segodnya">Эта неделя</button></div>
+      <button type="button" class="kv" data-ned="7" aria-label="Следующая неделя">›</button>
+    </div>
+    <div class="dni-zal" id="dni-zal"></div>
+    <div class="legenda"><span><i class="lg gr"></i>группа</span><span><i class="lg pe"></i>персональное</span><span><i class="lg ar"></i>аренда</span><span>Нажмите на свободный час, чтобы занять</span></div>
+    <div class="setka-zal" id="setka-zal"></div>
+  </section>
+
+  <!-- Расписание -->
+  <section id="t-rasp" class="vkladka" hidden>
+    <div class="ryad"><p class="prim">Изменения сразу видны на сайте.</p><button type="button" class="btn" id="gr-novaya">Добавить группу</button></div>
+    <div id="rasp-spisok"></div>
+  </section>
+</main>
+
+<nav class="niz" id="niz" hidden>
+  <button type="button" data-t="zapisi" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>Записи</button>
+  <button type="button" data-t="abon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>Абонементы</button>
+  <button type="button" data-t="zal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18"/><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/></svg>Зал</button>
+  <button type="button" data-t="rasp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Расписание</button>
+</nav>
+
+<!-- Окно-форма -->
+<div class="okno" id="okno" hidden>
+  <div class="okno-v" role="dialog" aria-modal="true" aria-labelledby="okno-zag">
+    <div class="okno-shapka"><h2 id="okno-zag"></h2><button type="button" class="kv" id="okno-x" aria-label="Закрыть">×</button></div>
+    <div id="okno-telo"></div>
+  </div>
+</div>
+<div class="tost" id="tost" role="status" hidden></div>
+
+<script src="kabinet.js"></script>
+</body>
+</html>
