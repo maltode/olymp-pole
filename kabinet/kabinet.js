@@ -37,7 +37,7 @@
   var DN = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
   var DN_FULL = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
   var MES = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
-  var LV = { nach: 'начинающие', prod: 'продолжающие', profi: 'профи' };
+  var LV = { nach: 'новички', prod: 'продолжающие', profi: 'профи' };
   var OPL = { razovoe: 'разовое', abon: 'по абонементу', kupit: 'купит абонемент', admin: 'добавлена вручную' };
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function d(iso) { return new Date(iso + 'T00:00:00Z'); }
@@ -91,7 +91,7 @@
       out += '<div class="zapisi-setka">' + j.items.map(zanyatie).join('') + '</div>';
       if (j.zal.length) {
         out += '<div class="zal-den"><h3>Зал</h3><ul>' + j.zal.map(function (z) {
-          return '<li>' + z.start + '–' + z.end + ' · ' + (z.kind === 'arenda' ? 'аренда' : 'персональное') + (z.who ? ', ' + esc(z.who) : '') + (z.paid ? ' · оплачено' : '') + '</li>';
+          return '<li>' + z.start + '–' + z.end + ' · ' + (z.kind === 'arenda' ? 'аренда' : 'персональное') + (z.who ? ', ' + esc(z.who) : '') + ' · ' + (z.paid ? 'оплачено' : '<span class="neopl">не оплачено</span>') + '</li>';
         }).join('') + '</ul></div>';
       }
       $('#den-spisok').innerHTML = out;
@@ -106,7 +106,9 @@
     }
     var lyudi = o.zapisi.length ? o.zapisi.map(chelovek).join('') : '<p class="pustaya">Пока никто не записан</p>';
     return '<div class="zan">' + head + lyudi +
-      '<div class="zan-niz"><button type="button" class="ssylka" data-dobavit="' + o.gid + '">+ Добавить ученика</button><button type="button" class="ssylka" data-otmena="' + o.gid + '" data-on="1">Отменить занятие</button></div></div>';
+      '<div class="zan-niz"><button type="button" class="ssylka" data-dobavit="' + o.gid + '">+ Добавить ученика</button>' +
+      '<button type="button" class="ssylka" data-limit="' + o.gid + '" data-mest="' + o.mest + '" data-baza="' + o.mestBase + '">Мест: ' + o.mest + (o.mest !== o.mestBase ? ' (обычно ' + o.mestBase + ')' : '') + '</button>' +
+      '<button type="button" class="ssylka" data-otmena="' + o.gid + '" data-on="1">Отменить занятие</button></div></div>';
   }
   function chelovek(z) {
     var mt = [];
@@ -152,6 +154,17 @@
         var name = $('#d-imya').value.trim(); if (!name) return;
         api('zapis_add', { gid: gid, date: den, name: name, phone: $('#d-tel').value.trim() }).then(function () { zakryt(); tost('Добавлено'); risDen(); }).catch(function () {});
       });
+      return;
+    }
+    // Своё число мест на это занятие: например, по двое на пилон по согласованию с ученицами
+    if (b.dataset.limit) {
+      var lg = +b.dataset.limit, baza = +b.dataset.baza;
+      okno('Мест на ' + dlong(den), '<form id="f-lim"><p class="prim">Обычно ' + baza + '. Если договорились заниматься по двое на пилон, поставьте больше: на сайте сразу появятся свободные места. Меняется только это занятие.</p>' +
+        '<label for="l-m">Мест на занятии</label><input id="l-m" type="number" min="1" max="50" value="' + b.dataset.mest + '">' +
+        '<div class="knopki"><button class="btn" type="submit">Сохранить</button>' + (+b.dataset.mest !== baza ? '<button class="btn btn--k" type="button" id="l-sbros">Вернуть ' + baza + '</button>' : '') + '</div></form>');
+      var sohr = function (v) { api('limit', { gid: lg, date: den, mest: v }).then(function (j) { zakryt(); tost('Мест на занятии: ' + j.mest); risDen(); }).catch(function () {}); };
+      $('#f-lim').addEventListener('submit', function (ev) { ev.preventDefault(); var v = +$('#l-m').value; if (v >= 1 && v <= 50) sohr(v); });
+      var sb = $('#l-sbros'); if (sb) sb.addEventListener('click', function () { sohr(''); });
       return;
     }
     if (b.dataset.otmena) {
@@ -280,7 +293,7 @@
             s += '<button type="button" class="blok gr" style="' + shir + poz(g.start, g.end) + '" data-gr="' + g.gid + '|' + iso + '"><b>' + g.start.replace(/^0/, '') + ' ' + esc(g.title) + '</b>' + esc(g.trainer) + ' · ' + g.zan + ' из ' + g.mest + '</button>';
           } else {
             var z = x.z;
-            s += '<button type="button" class="blok ' + (z.kind === 'arenda' ? 'ar' : 'pe') + '" style="' + shir + poz(z.start, z.end) + '" data-zal="' + z.id + '"><b>' + z.start.replace(/^0/, '') + '–' + z.end.replace(/^0/, '') + ' ' + (z.kind === 'arenda' ? 'Аренда' : 'Персональное') + '</b>' + esc(z.who) + (z.paid ? ' · <span class="opl">оплачено</span>' : '') + '</button>';
+            s += '<button type="button" class="blok ' + (z.kind === 'arenda' ? 'ar' : 'pe') + '" style="' + shir + poz(z.start, z.end) + '" data-zal="' + z.id + '"><b>' + z.start.replace(/^0/, '') + '–' + z.end.replace(/^0/, '') + ' ' + (z.kind === 'arenda' ? 'Аренда' : 'Персональное') + '</b>' + esc(z.who) + ' · <span class="opl">' + (z.paid ? 'оплачено' : 'не оплачено') + '</span></button>';
           }
         });
         return s + '</div></div>';
@@ -300,14 +313,14 @@
       '<label for="z-tel">Телефон</label><input id="z-tel" type="tel" value="' + esc(z.phone || '') + '">' +
       '<label for="z-tr">Тренер</label><input id="z-tr" list="trenery" maxlength="40" value="' + esc(z.trainer || '') + '"><datalist id="trenery"><option>София</option><option>Карина</option><option>Роман</option></datalist>' +
       '<label for="z-zam">Заметка</label><input id="z-zam" maxlength="300" value="' + esc(z.note || '') + '">' +
-      '<label class="gal"><input type="checkbox" id="z-opl"' + (z.paid ? ' checked' : '') + '>Оплачено</label>' +
+      '<label>Оплата</label><div class="dva"><label class="gal"><input type="radio" name="z-opl" value="1"' + (z.paid ? ' checked' : '') + '>Оплачено</label><label class="gal"><input type="radio" name="z-opl" value="0"' + (z.paid ? '' : ' checked') + '>Не оплачено</label></div>' +
       '<div id="z-konf"></div>' +
       '<div class="knopki"><button class="btn" type="submit" id="z-save">Сохранить</button>' + (z.id ? '<button class="btn btn--opas" type="button" id="z-del">Удалить</button>' : '') + '</div></form>');
     var force = false;
     $('#f-zal').addEventListener('submit', function (ev) {
       ev.preventDefault();
       var body = { id: z.id, date: $('#z-data').value, start: $('#z-ot').value, end: $('#z-do').value, kind: document.querySelector('input[name=z-vid]:checked').value,
-        who: $('#z-kto').value.trim(), phone: $('#z-tel').value.trim(), trainer: $('#z-tr').value.trim(), note: $('#z-zam').value.trim(), paid: $('#z-opl').checked, force: force };
+        who: $('#z-kto').value.trim(), phone: $('#z-tel').value.trim(), trainer: $('#z-tr').value.trim(), note: $('#z-zam').value.trim(), paid: document.querySelector('input[name=z-opl]:checked').value === '1', force: force };
       if (mins(body.end) <= mins(body.start)) { $('#z-konf').innerHTML = '<p class="konflikt">Время «до» должно быть позже, чем «с».</p>'; return; }
       api('zal_save', body).then(function (j) {
         if (j.conflict) {

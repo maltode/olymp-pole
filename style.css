@@ -354,3 +354,7 @@ footer{padding:64px 0 112px}
 .cifry b{font-size:clamp(28px,3.2vw,40px);white-space:nowrap}
 .znak{margin:24px 0}
 @media (min-width:900px){.znak{margin-bottom:0}}
+/* «Что взять»: обязательное и по желанию (список Софии) */
+.pervoe .kik+.spisok{margin-top:16px}
+.spisok-glav{margin-bottom:32px}
+.spisok-dop{counter-reset:n 2}
