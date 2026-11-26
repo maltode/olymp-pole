@@ -156,6 +156,9 @@
     $('#faq-nach').textContent = nach.length ? ': ' + nach.map(function (g) { return DN[g.dow] + ' ' + vremya(g.time); }).join(' и ') : '';
     var maxM = Math.max.apply(null, D.groups.map(function (g) { return g.mest; }).concat([0]));
     if (maxM) $('#faq-mest').textContent = maxM;
+    // «11 групп в неделю» в полосе с цифрами: считаем по настоящему расписанию
+    var n = D.groups.length, a = n % 10, b = n % 100;
+    if (n) $('#cifra-grupp').textContent = n + ' ' + ((a === 1 && b !== 11) ? 'группа' : (a >= 2 && a <= 4 && (b < 12 || b > 14)) ? 'группы' : 'групп');
   }
   function endT(t, dur) { var m = +t.slice(0, 2) * 60 + +t.slice(3) + dur; return ('0' + Math.floor(m / 60)).slice(-2) + ':' + ('0' + m % 60).slice(-2); }
 
