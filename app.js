@@ -195,7 +195,7 @@
     $('#abon-prim').textContent = bezAbon ? 'на занятия 1,5 часа абонемент не действует' : 'спишем одно занятие';
     var imya = imyaEl.value.trim();
     $('#puzyr').textContent = 'Здравствуйте' + (imya ? ', ' + imya : '') + '! Напоминаем: завтра, ' + dataKor(g.date) + ', в ' + vremya(g.time) +
-      ' занятие ' + g.title + (g.trainer ? ' (тренер ' + g.trainer + ')' : '') + '.\nOlymp Pole, Боровая ул., 116, 3 этаж, офис 312.\nС собой топ и шорты. По желанию: средства сцепления, полотенце для протирки пилона, вода.';
+      ' занятие ' + g.title + (g.trainer ? ' (тренер ' + g.trainer + ')' : '') + '.\nOlymp Pole, Боровая ул., 116, 3 этаж, офис 312.\nС собой топ и шорты. По возможности: средства сцепления, полотенце для протирки пилона, вода.';
   }
 
   function vseRisovat() { risovatUroven(); risovatDni(); risovatGruppy(); risovatVybor(); }
