@@ -37,7 +37,7 @@
 
 <header class="shapka"><div class="wrap">
   <a class="imya" href="#top">Olymp Pole</a>
-  <nav aria-label="Разделы"><a href="#urovni">Уровни</a><a href="#raspisanie">Расписание</a><a href="#ceny">Цены</a><a href="#trenery">Тренеры</a><a href="#kontakty">Контакты</a></nav>
+  <nav aria-label="Разделы"><a href="#urovni">Уровни</a><a href="#ceny">Цены</a><a href="#raspisanie">Расписание</a><a href="#trenery">Тренеры</a><a href="#kontakty">Контакты</a></nav>
   <a class="btn btn--mal" href="#raspisanie">Записаться</a>
 </div></header>
 
@@ -96,14 +96,46 @@
   </div>
 </div></section>
 
+<section class="ceny" id="ceny"><div class="wrap">
+  <div class="zag rv"><p class="kik">Цены</p><h2>Разово <em>или абонементом</em></h2>
+    <p class="pod">Выберите вариант, потом занятие в расписании. Оплата в студии, наличными или переводом.</p></div>
+  <div class="tarify rv">
+    <div class="tarif" data-t="razovoe"><h3>Разовое занятие</h3><p class="summa">1&nbsp;200&nbsp;₽</p><p>Групповое занятие, 1 час</p>
+      <button type="button" class="tarif-kn" data-tarif="razovoe">Выбрать занятие <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button></div>
+    <div class="tarif" data-t="kupit4"><h3>Абонемент на 4 занятия</h3><p class="summa">4&nbsp;200&nbsp;₽</p><p>1&nbsp;050&nbsp;₽ за занятие</p>
+      <button type="button" class="tarif-kn" data-tarif="kupit4">Выбрать абонемент <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button></div>
+    <div class="tarif glav" data-t="kupit8"><span class="metka">Выгоднее</span><h3>Абонемент на 8 занятий</h3><p class="summa">8&nbsp;000&nbsp;₽</p><p>1&nbsp;000&nbsp;₽ за занятие</p>
+      <button type="button" class="tarif-kn" data-tarif="kupit8">Выбрать абонемент <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button></div>
+    <div class="tarif tarif--perso"><h3>Персональное занятие</h3><p class="summa">от 3&nbsp;000&nbsp;₽</p><p>Один на один с тренером, время подбираем под вас</p>
+      <button type="button" class="tarif-kn" data-okno="perso">Оставить заявку <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button></div>
+  </div>
+  <div class="ceny-niz">
+    <ul class="ceny-prim">
+      <li><b>Занятия 1,5 часа</b> (СФП + Pole sport) оплачиваются отдельно как разовое занятие: <b>1&nbsp;500&nbsp;₽</b>.</li>
+      <li>Абонемент действует <span class="zaglushka" id="srok">[срок уточняется]</span>, посещения отмечаются в электронном виде.</li>
+    </ul>
+    <button type="button" class="moj-abon" data-okno="abon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg><span><b>Уже есть абонемент?</b> Посмотрите, сколько занятий осталось</span></button>
+  </div>
+</div></section>
+
 <section class="raspisanie" id="raspisanie"><div class="wrap">
   <div class="zag rv"><p class="kik">Расписание</p><h2>Группы <em>и свободные места</em></h2></div>
-  <p class="filtr" id="filtr"></p>
+  <div class="vybor-tarif" id="vybor-tarif" hidden></div>
+  <div class="paneli">
+    <div class="chipy" id="chipy" role="group" aria-label="Уровень">
+      <button type="button" class="chip" data-lv-set="" aria-pressed="true">Все уровни</button>
+      <button type="button" class="chip" data-lv-set="nach" aria-pressed="false">Новичок</button>
+      <button type="button" class="chip" data-lv-set="prod" aria-pressed="false">Продолжающие</button>
+      <button type="button" class="chip" data-lv-set="profi" aria-pressed="false">Профи</button>
+    </div>
+    <div class="nedeli" role="group" aria-label="Неделя">
+      <button type="button" data-ned="0" aria-pressed="true">Эти 7 дней</button><button type="button" data-ned="1" aria-pressed="false">Следующие 7</button>
+    </div>
+  </div>
   <div class="dni" id="dni" role="tablist" aria-label="День"></div>
   <p class="den-zag" id="den-zag"></p>
   <ol class="zanyatiya" id="zanyatiya" aria-live="polite"><li class="zagruzka">Загружаем расписание…</li></ol>
-  <p class="legenda"><span><i class="m z"></i>занято</span><span><i class="m"></i>свободно</span><span>Места обновляются сразу после записи</span></p>
-  <details class="nedelya"><summary>Расписание на неделю списком<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+  <details class="nedelya"><summary>Всё расписание на неделю списком<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
     <div class="nedelya-spisok" id="nedelya"></div>
   </details>
 </div></section>
@@ -124,9 +156,10 @@
         <p class="oshibka" id="o-tel" hidden>Проверьте номер: нужно 11 цифр, например +7 900 000-00-00</p>
         <fieldset class="oplata" id="oplata">
           <legend class="leg">Как оплатите</legend>
-          <label class="var"><input type="radio" name="oplata" value="razovoe" checked><span>Разовое занятие <small id="cena-raz">1&nbsp;200&nbsp;₽ на месте</small></span></label>
-          <label class="var"><input type="radio" name="oplata" value="abon"><span>По абонементу <small id="abon-prim">спишем одно занятие</small></span></label>
-          <label class="var"><input type="radio" name="oplata" value="kupit"><span>Куплю абонемент на занятии <small>на 4 или 8 занятий</small></span></label>
+          <label class="var"><input type="radio" name="oplata" value="razovoe" checked><span>Разовое занятие <small id="cena-raz">1&nbsp;200&nbsp;₽ в студии</small></span></label>
+          <label class="var"><input type="radio" name="oplata" value="abon"><span>У меня есть абонемент <small id="abon-prim">спишем одно занятие</small></span></label>
+          <label class="var"><input type="radio" name="oplata" value="kupit4"><span>Куплю абонемент на 4 занятия <small>4&nbsp;200&nbsp;₽ в студии, это занятие первое</small></span></label>
+          <label class="var"><input type="radio" name="oplata" value="kupit8"><span>Куплю абонемент на 8 занятий <small>8&nbsp;000&nbsp;₽ в студии, это занятие первое</small></span></label>
         </fieldset>
         <div class="lovushka" aria-hidden="true"><label for="site">Сайт</label><input id="site" name="site" tabindex="-1" autocomplete="off"></div>
         <button class="btn btn--shir knopka-otpr" type="submit" id="go">Записаться</button>
@@ -153,47 +186,6 @@ Olymp Pole, Боровая ул., 116, 3 этаж, офис 312.
       </div>
       <p class="melko">Напоминание приходит, если после записи нажать «Получать напоминания в Telegram». «Не смогу» отменяет запись, и место освобождается для другого человека.</p>
     </aside>
-  </div>
-</div></section>
-
-<section class="ceny" id="ceny"><div class="wrap">
-  <div class="zag rv"><p class="kik">Цены</p><h2>Разово <em>или абонементом</em></h2></div>
-  <div class="tarify rv">
-    <div class="tarif"><h3>Разовое занятие</h3><p class="summa">1&nbsp;200&nbsp;₽</p><p>Групповое занятие, 1 час</p></div>
-    <div class="tarif"><h3>Абонемент на 4 занятия</h3><p class="summa">4&nbsp;200&nbsp;₽</p><p>1&nbsp;050&nbsp;₽ за занятие</p></div>
-    <div class="tarif glav"><span class="metka">Выгоднее</span><h3>Абонемент на 8 занятий</h3><p class="summa">8&nbsp;000&nbsp;₽</p><p>1&nbsp;000&nbsp;₽ за занятие</p></div>
-  </div>
-  <div class="ceny-prim">
-    <p><b>Занятия 1,5 часа</b> (СФП + Pole sport) оплачиваются отдельно как разовое занятие: <b>1&nbsp;500&nbsp;₽</b>.</p>
-    <p>Абонемент действует <span class="zaglushka" id="srok">[срок уточняется]</span>. Посещения отмечаются в электронном виде, остаток можно проверить ниже.</p>
-  </div>
-  <div class="dop">
-    <div class="panel rv" id="perso">
-      <h3>Персональные занятия</h3>
-      <p>От <b>3&nbsp;000&nbsp;₽</b>. Время подбираем под вас: оставьте телефон, студия свяжется.</p>
-      <form id="perso-forma" novalidate>
-        <label for="p-imya">Имя</label><input id="p-imya" autocomplete="given-name" maxlength="60" aria-describedby="o-p-imya">
-        <p class="oshibka" id="o-p-imya" hidden>Напишите имя</p>
-        <label for="p-tel">Телефон</label><input id="p-tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 900 000-00-00" aria-describedby="o-p-tel">
-        <p class="oshibka" id="o-p-tel" hidden>Проверьте номер: нужно 11 цифр</p>
-        <label for="p-msg">Когда удобно и что хотите (необязательно)</label><textarea id="p-msg" maxlength="500"></textarea>
-        <div class="lovushka" aria-hidden="true"><input id="p-site" tabindex="-1" autocomplete="off"></div>
-        <button class="btn btn--shir" type="submit">Оставить заявку</button>
-        <p class="oshibka" id="o-p-otpr" hidden></p>
-      </form>
-      <p class="itog-abon" id="perso-gotovo" hidden><b>Заявка отправлена.</b> Студия свяжется с вами по телефону или в мессенджере.</p>
-    </div>
-    <div class="panel rv" id="moj-abonement">
-      <h3>Мой абонемент</h3>
-      <p>Сколько занятий осталось и когда отмечены. Номер абонемента скажет тренер.</p>
-      <form id="abon-forma" novalidate>
-        <label for="a-nomer">Номер абонемента</label><input id="a-nomer" inputmode="numeric" maxlength="6" placeholder="например, 12">
-        <label for="a-tel">Телефон, на который оформлен</label><input id="a-tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 900 000-00-00">
-        <p class="oshibka" id="o-abon" hidden></p>
-        <button class="btn btn--shir btn--kontur" type="submit">Проверить</button>
-      </form>
-      <div class="itog-abon" id="abon-itog" hidden></div>
-    </div>
   </div>
 </div></section>
 
@@ -307,6 +299,36 @@ Olymp Pole, Боровая ул., 116, 3 этаж, офис 312.
   </div>
   <p class="podval-melko">© Olymp Pole, 2026 · * Instagram принадлежит компании Meta, признанной экстремистской организацией и запрещённой в России.</p>
 </div></footer>
+
+<div class="okno" id="okno" hidden>
+  <div class="okno-v" role="dialog" aria-modal="true" aria-labelledby="okno-zag">
+    <div class="okno-shapka"><h3 id="okno-zag"></h3><button type="button" class="okno-x" id="okno-x" aria-label="Закрыть"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
+    <div id="o-perso" hidden>
+      <p class="okno-pod">От 3&nbsp;000&nbsp;₽. Оставьте телефон: студия свяжется и предложит удобное время.</p>
+      <form id="perso-forma" novalidate>
+        <label for="p-imya">Имя</label><input id="p-imya" autocomplete="given-name" maxlength="60" aria-describedby="o-p-imya">
+        <p class="oshibka" id="o-p-imya" hidden>Напишите имя</p>
+        <label for="p-tel">Телефон</label><input id="p-tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 900 000-00-00" aria-describedby="o-p-tel">
+        <p class="oshibka" id="o-p-tel" hidden>Проверьте номер: нужно 11 цифр</p>
+        <label for="p-msg">Когда удобно и что хотите (необязательно)</label><textarea id="p-msg" maxlength="500" placeholder="Например: будни после 19:00, хочу освоить флаг"></textarea>
+        <div class="lovushka" aria-hidden="true"><input id="p-site" tabindex="-1" autocomplete="off"></div>
+        <button class="btn btn--shir knopka-otpr" type="submit">Отправить заявку</button>
+        <p class="oshibka" id="o-p-otpr" hidden></p>
+      </form>
+      <div class="itog-abon" id="perso-gotovo" hidden><b>Заявка отправлена.</b><p>Студия свяжется с вами по телефону или в мессенджере.</p></div>
+    </div>
+    <div id="o-abon" hidden>
+      <p class="okno-pod">Номер абонемента скажет тренер, когда оформит его в студии. Здесь видно, сколько занятий осталось и какие уже отмечены.</p>
+      <form id="abon-forma" novalidate>
+        <label for="a-nomer">Номер абонемента</label><input id="a-nomer" inputmode="numeric" maxlength="6" placeholder="например, 12">
+        <label for="a-tel">Телефон, на который оформлен</label><input id="a-tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 900 000-00-00">
+        <p class="oshibka" id="o-abon" hidden></p>
+        <button class="btn btn--shir knopka-otpr" type="submit">Показать</button>
+      </form>
+      <div class="itog-abon" id="abon-itog" hidden></div>
+    </div>
+  </div>
+</div>
 
 <div class="lipkaya" id="lipkaya"><a class="btn btn--shir" href="#raspisanie">Записаться на занятие</a></div>
 

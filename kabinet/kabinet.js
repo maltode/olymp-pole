@@ -38,7 +38,7 @@
   var DN_FULL = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
   var MES = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
   var LV = { nach: 'новички', prod: 'продолжающие', profi: 'профи' };
-  var OPL = { razovoe: 'разовое', abon: 'по абонементу', kupit: 'купит абонемент', admin: 'добавлена вручную' };
+  var OPL = { razovoe: 'разовое', abon: 'по абонементу', kupit: 'купит абонемент', kupit4: 'купит абонемент на 4', kupit8: 'купит абонемент на 8', admin: 'добавлена вручную' };
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function d(iso) { return new Date(iso + 'T00:00:00Z'); }
   function addDays(iso, n) { var x = d(iso); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10); }

@@ -1,4 +1,4 @@
-// Olymp Pole: расписание со свободными местами, запись, проверка абонемента, заявка на персональное.
+// Olymp Pole: цены с выбором, расписание со свободными местами, запись, окна «персональное» и «мой абонемент».
 // Данные берём с сервера студии (Cloudflare Worker). Расписание София меняет в кабинете бота, сайт обновляется сам.
 (function () {
   'use strict';
@@ -21,27 +21,31 @@
   var DN_FULL = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
   var MES = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
   var LV = { nach: 'новички', prod: 'продолжающие', profi: 'профи' };
-  var CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
   var URS = {
     // описания уровней — слова Софии (ТЗ 26.11, п. 11)
     nach: { num: 'I', imya: 'Новичок', opis: 'Подходит для людей, которые никогда не занимались спортом или имеют небольшой опыт занятий. Иметь специальную подготовку необязательно.' },
     prod: { num: 'II', imya: 'Продолжающие', opis: 'Подходит для учеников, владеющих техникой основных базовых элементов (например: рогатка, шолдер, флаг).' },
     profi: { num: 'III', imya: 'Профи', opis: 'Подходит для учеников, уверенно владеющих техникой большинства базовых элементов.' }
   };
+  var TARIFY = {
+    razovoe: { imya: 'Разовое занятие', kratko: 'разовое занятие, 1 200 ₽ в студии' },
+    kupit4: { imya: 'Абонемент на 4 занятия', kratko: 'абонемент на 4 занятия, 4 200 ₽ в студии' },
+    kupit8: { imya: 'Абонемент на 8 занятий', kratko: 'абонемент на 8 занятий, 8 000 ₽ в студии' }
+  };
 
-  function levelText(lv) { return lv ? lv.split(',').map(function (x) { return LV[x] || x; }).join(' и ') : 'все уровни'; }
+  function levelText(l) { return l ? l.split(',').map(function (x) { return LV[x] || x; }).join(' и ') : 'все уровни'; }
   function d(iso) { return new Date(iso + 'T00:00:00Z'); }
   function dataLong(iso) { var x = d(iso); return DN[x.getUTCDay()] + ', ' + x.getUTCDate() + ' ' + MES[x.getUTCMonth()]; }
   function dataKor(iso) { var x = d(iso); return x.getUTCDate() + ' ' + MES[x.getUTCMonth()]; }
   function addDays(iso, n) { var x = d(iso); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10); }
   function vremya(t) { return t.replace(/^0/, ''); }
   function mest(n) { var a = n % 10, b = n % 100; return (a === 1 && b !== 11) ? 'место' : (a >= 2 && a <= 4 && (b < 12 || b > 14)) ? 'места' : 'мест'; }
-  function ostalos(n) { return n === 1 ? 'осталось 1 место' : 'осталось ' + n + ' ' + mest(n); }
   // неразрывные пробелы: «1 500 ₽» не переносится по частям
   function rub(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ₽'; }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function cifry(v) { var c = String(v).replace(/\D/g, ''); if (c.length === 10 && c[0] === '9') c = '7' + c; return c; }
-  function telOk(v) { return /^[78]9\d{9}$/.test(cifry(v)) || /^[78]\d{10}$/.test(cifry(v)); }
+  function telOk(v) { return /^[78]\d{10}$/.test(cifry(v)); }
+  function endT(t, dur) { var m = +t.slice(0, 2) * 60 + +t.slice(3) + dur; return ('0' + Math.floor(m / 60)).slice(-2) + ':' + ('0' + m % 60).slice(-2); }
 
   // время Петербурга, где бы ни открыли страницу
   var NOW = new Date(Date.now() + 3 * 3600e3);
@@ -51,16 +55,15 @@
   else st.textContent = 'Откроемся в 8:00';
 
   // ---------- состояние ----------
-  var D = null, lv = '', den = 0, vybor = null, dni = [], oshibkaSeti = false;
+  var D = null, lv = '', ned = 0, den = 0, vybor = null, dni = [], tarif = null;
 
   function podhodit(i) { return !lv || !i.level || i.level.split(',').indexOf(lv) > -1; }
   function naDen(iso) { return D.items.filter(function (i) { return i.date === iso; }); }
 
   function zagruzit(cb) {
     fetch(API + '/raspisanie', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 0; return r.json(); })
-      .then(function (j) { D = j; oshibkaSeti = false; cb && cb(); })
+      .then(function (j) { D = j; cb && cb(); })
       .catch(function () {
-        oshibkaSeti = true;
         if (!D) $('#zanyatiya').innerHTML = '<li class="pustoj">Не получилось загрузить расписание. Обновите страницу или напишите студии во <a class="ssylka" href="https://vk.ru/olymppole" target="_blank" rel="noopener">ВКонтакте</a>.</li>';
       });
   }
@@ -69,55 +72,56 @@
   function gruppyUrovnya(code) {
     return D ? D.groups.filter(function (g) { return g.level && g.level.split(',').indexOf(code) > -1; }) : [];
   }
-  function kratkoGruppy(gg) {
-    return gg.map(function (g) { return DN[g.dow] + ' ' + vremya(g.time) + (g.trainer ? ' (' + esc(g.trainer) + ')' : ''); }).join(', ');
-  }
   function risovatUroven() {
     $$('.st').forEach(function (b) { b.setAttribute('aria-checked', b.dataset.lv === lv); });
+    $$('#chipy .chip').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.lvSet === lv); });
     var opis = $('#opis');
     if (lv) {
       var u = URS[lv], gg = gruppyUrovnya(lv);
       opis.innerHTML = '<p class="kik">' + u.num + ' уровень</p><h3>' + u.imya + '</h3><p>' + u.opis + '</p>' +
-        (gg.length ? '<p class="kik">Группы</p><p>' + kratkoGruppy(gg) + '</p>' : '') +
+        (gg.length ? '<p class="kik">Группы</p><p>' + gg.map(function (g) { return DN[g.dow] + ' ' + vremya(g.time) + (g.trainer ? ' (' + esc(g.trainer) + ')' : ''); }).join(', ') + '</p>' : '') +
         '<a class="ssylka" href="#raspisanie">Записаться в группу</a>';
     } else {
-      opis.innerHTML = '<p class="kik">Все уровни</p><h3>Всё расписание</h3><p>Сейчас показаны группы всех уровней. Если сомневаетесь, начните с группы для новичков: тренер на занятии подскажет, куда двигаться дальше.</p>';
+      opis.innerHTML = '<p class="kik">Все уровни</p><h3>Выберите свой уровень</h3><p>Нажмите на уровень слева, и в расписании останутся только подходящие группы. Если сомневаетесь, начните с группы для новичков: тренер на занятии подскажет, куда двигаться дальше.</p>';
     }
-    $('#filtr').innerHTML = lv ? 'Показаны группы: <b>' + LV[lv] + '</b> и для всех уровней <button type="button" class="ssylka" data-lv-set="">Показать все</button>'
-      : 'Показаны <b>все группы</b>. Выберите уровень выше, чтобы оставить только свои.';
   }
 
-  // ---------- дни ----------
+  // ---------- дни: 7 штук, «эти» или «следующие» ----------
   function risovatDni() {
-    $('#dni').innerHTML = dni.map(function (iso, i) {
-      var n = naDen(iso).filter(function (x) { return podhodit(x) && !x.cancelled; }).length;
-      var x = d(iso);
-      return '<button type="button" class="den' + (n ? '' : ' pusto') + '" role="tab" aria-selected="' + (i === den) + '" data-den="' + i + '" aria-label="' + dataLong(iso) + ', групп: ' + n + '">' +
-        '<small>' + (i === 0 ? 'сег' : DN[x.getUTCDay()]) + '</small><b>' + x.getUTCDate() + '</b><span class="tochki">' + new Array(Math.min(n, 4) + 1).join('<i></i>') + '</span></button>';
+    var s = ned * 7;
+    $('#dni').innerHTML = dni.slice(s, s + 7).map(function (iso, k) {
+      var i = s + k, x = d(iso);
+      var n = naDen(iso).filter(function (z) { return podhodit(z) && !z.cancelled; }).length;
+      return '<button type="button" class="den' + (n ? '' : ' pusto') + (i === 0 ? ' segodnya' : '') + '" role="tab" aria-selected="' + (i === den) + '" data-den="' + i + '" aria-label="' + dataLong(iso) + ', групп: ' + n + '">' +
+        '<small>' + DN[x.getUTCDay()] + '</small><b>' + x.getUTCDate() + '</b><span class="den-n">' + (n ? n + ' ' + (n === 1 ? 'группа' : n < 5 ? 'группы' : 'групп') : 'нет') + '</span></button>';
     }).join('');
+    $$('.nedeli button').forEach(function (b) { b.setAttribute('aria-pressed', +b.dataset.ned === ned); });
     $('#den-zag').textContent = (den === 0 ? 'Сегодня, ' : den === 1 ? 'Завтра, ' : '') + dataLong(dni[den]);
   }
 
-  // ---------- занятия выбранного дня ----------
+  // ---------- занятия выбранного дня: каждое отдельной карточкой ----------
+  function mestaTekst(g) {
+    if (g.cancelled) return '<span class="mesta-t net">Занятие отменено</span>';
+    if (!g.free) return '<span class="mesta-t net">Мест нет</span>';
+    var malo = g.free <= 2;
+    return '<span class="mesta-t' + (malo ? ' malo' : '') + '"><span>' + (malo ? 'Осталось ' : 'Свободно ') + g.free + ' ' + mest(g.free) + ' <small>из ' + g.mest + '</small></span></span>';
+  }
   function risovatGruppy() {
     var gg = naDen(dni[den]).filter(podhodit);
     var el = $('#zanyatiya');
     if (!gg.length) {
       el.innerHTML = '<li class="pustoj">' + (den === 0 ? 'На сегодня подходящих групп больше нет.' : 'В этот день подходящих групп нет.') +
-        ' <button type="button" class="ssylka" data-blizh>Ближайшее занятие</button></li>';
+        ' <button type="button" class="ssylka" data-blizh>Показать ближайшее занятие</button></li>';
       return;
     }
     el.innerHTML = gg.map(function (g) {
-      var tochki = '', zan = g.mest - g.free;
-      if (g.mest <= 12) for (var k = 0; k < g.mest; k++) tochki += '<i class="m' + (k < zan ? ' z' : '') + '"></i>';
       var moya = vybor && vybor.gid === g.gid && vybor.date === g.date;
-      var knopka = g.cancelled ? '<button type="button" class="btn btn--kontur" disabled>Отменено</button>'
-        : '<button type="button" class="btn' + (g.free ? '' : ' btn--kontur') + '" data-id="' + g.gid + '|' + g.date + '">' + (moya ? 'Выбрано' : g.free ? 'Записаться' : 'В лист ожидания') + '</button>';
-      var mestaTxt = g.cancelled ? 'занятие отменено' : g.free ? ostalos(g.free) : 'мест нет';
+      var knopka = g.cancelled ? '' : '<button type="button" class="btn' + (g.free ? '' : ' btn--kontur') + '" data-id="' + g.gid + '|' + g.date + '">' + (moya ? 'Выбрано' : g.free ? 'Записаться' : 'В лист ожидания') + '</button>';
       return '<li class="zn' + (g.cancelled ? ' otm' : g.free ? '' : ' polno') + (moya ? ' vybrano' : '') + '">' +
-        '<time>' + vremya(g.time) + '<small>' + (g.dur === 60 ? '1 час' : 'до ' + vremya(g.end)) + '</small></time>' +
-        '<div class="zn-o"><b>' + esc(g.title) + '</b><span>' + levelText(g.level) + (g.trainer ? ' · ' + esc(g.trainer) : '') + (g.price !== 1200 ? ' · ' + rub(g.price) : '') + '</span>' +
-        '<span class="mesta" aria-label="Занято ' + zan + ' из ' + g.mest + '">' + tochki + '<em>' + mestaTxt + '</em></span></div>' + knopka + '</li>';
+        '<div class="zn-vr"><time>' + vremya(g.time) + '</time><small>до ' + vremya(g.end) + '</small></div>' +
+        '<div class="zn-o"><b>' + esc(g.title) + '</b><span class="zn-meta"><span class="ur">' + levelText(g.level) + '</span>' +
+        (g.trainer ? '<span>' + esc(g.trainer) + '</span>' : '') + (g.price !== 1200 ? '<span>' + rub(g.price) + '</span>' : '') + '</span></div>' +
+        '<div class="zn-d">' + mestaTekst(g) + knopka + '</div></li>';
     }).join('');
   }
 
@@ -132,19 +136,20 @@
     }
     return null;
   }
+  function naDenPereiti(i) { den = i; ned = i >= 7 ? 1 : 0; }
   function najti(id) {
     var p = id.split('|');
     return D.items.filter(function (g) { return g.gid === +p[0] && g.date === p[1]; })[0];
   }
 
-  // ---------- неделя списком, тренеры, вопросы ----------
+  // ---------- неделя списком, тренеры, вопросы, цифры ----------
   function risovatNedelyu() {
-    var po = [1, 2, 3, 4, 5, 6, 0], out = '';
-    po.forEach(function (dw) {
+    var out = '';
+    [1, 2, 3, 4, 5, 6, 0].forEach(function (dw) {
       var gg = D.groups.filter(function (g) { return g.dow === dw; });
       if (!gg.length) return;
       out += '<div><h3>' + DN_FULL[dw] + '</h3><ul>' + gg.map(function (g) {
-        return '<li><b>' + vremya(g.time) + (g.dur !== 60 ? '–' + vremya(endT(g.time, g.dur)) : '') + '</b><span>' + esc(g.title) + ', ' + levelText(g.level) + (g.trainer ? ', ' + esc(g.trainer) : '') + '</span></li>';
+        return '<li><b>' + vremya(g.time) + '–' + vremya(endT(g.time, g.dur)) + '</b><span>' + esc(g.title) + ', ' + levelText(g.level) + (g.trainer ? ', ' + esc(g.trainer) : '') + '</span></li>';
       }).join('') + '</ul></div>';
     });
     $('#nedelya').innerHTML = out;
@@ -160,22 +165,34 @@
     var n = D.groups.length, a = n % 10, b = n % 100;
     if (n) $('#cifra-grupp').textContent = n + ' ' + ((a === 1 && b !== 11) ? 'группа' : (a >= 2 && a <= 4 && (b < 12 || b > 14)) ? 'группы' : 'групп');
   }
-  function endT(t, dur) { var m = +t.slice(0, 2) * 60 + +t.slice(3) + dur; return ('0' + Math.floor(m / 60)).slice(-2) + ':' + ('0' + m % 60).slice(-2); }
+
+  // ---------- выбранный тариф ----------
+  function risovatTarif() {
+    $$('.tarif').forEach(function (t) { t.classList.toggle('vybran', !!tarif && t.dataset.t === tarif); });
+    var el = $('#vybor-tarif');
+    if (!tarif) { el.hidden = true; return; }
+    el.hidden = false;
+    el.innerHTML = '<span><b>' + TARIFY[tarif].imya + '.</b> ' + (tarif === 'razovoe' ? 'Выберите занятие ниже.' : 'Выберите первое занятие ниже, абонемент оформят в студии.') + '</span>' +
+      '<button type="button" class="ssylka" data-tarif-sbros>Изменить</button>';
+  }
+  function postavitOplatu() {
+    var r = document.querySelector('input[name=oplata][value=' + (tarif || 'razovoe') + ']');
+    if (r && !r.disabled) r.checked = true;
+  }
 
   // ---------- выбранное занятие в форме ----------
   var imyaEl = $('#imya'), telEl = $('#tel');
   function risovatVybor() {
     if (!vybor) return;
     var g = najti(vybor.gid + '|' + vybor.date) || vybor;
-    $('#vybrano').innerHTML = '<b>' + dataLong(g.date) + ', ' + vremya(g.time) + '</b><span>' + esc(g.title) + ' · ' + levelText(g.level) +
-      (g.trainer ? ' · ' + esc(g.trainer) : '') + ' · ' + (g.free ? ostalos(g.free) : 'мест нет, лист ожидания') + '</span>';
+    $('#vybrano').innerHTML = '<b>' + dataLong(g.date) + ', ' + vremya(g.time) + '–' + vremya(g.end) + '</b><span>' + esc(g.title) + ' · ' + levelText(g.level) +
+      (g.trainer ? ' · ' + esc(g.trainer) : '') + ' · ' + (g.free ? 'свободно ' + g.free + ' ' + mest(g.free) : 'мест нет, лист ожидания') + '</span>';
     $('#go').textContent = g.free ? 'Записаться' : 'Встать в лист ожидания';
-    $('#cena-raz').textContent = rub(g.price) + ' на месте';
-    var r = document.querySelectorAll('input[name=oplata]');
+    $('#cena-raz').textContent = rub(g.price) + ' в студии';
     var bezAbon = !g.abon;
-    r[1].disabled = bezAbon; r[2].disabled = bezAbon;
-    if (bezAbon && !r[0].checked) r[0].checked = true;
-    $('#abon-prim').textContent = bezAbon ? 'на занятия 1,5 часа не действует' : 'спишем одно занятие';
+    $$('input[name=oplata]').forEach(function (r) { if (r.value !== 'razovoe') r.disabled = bezAbon; });
+    if (bezAbon) document.querySelector('input[name=oplata][value=razovoe]').checked = true;
+    $('#abon-prim').textContent = bezAbon ? 'на занятия 1,5 часа абонемент не действует' : 'спишем одно занятие';
     var imya = imyaEl.value.trim();
     $('#puzyr').textContent = 'Здравствуйте' + (imya ? ', ' + imya : '') + '! Напоминаем: завтра, ' + dataKor(g.date) + ', в ' + vremya(g.time) +
       ' занятие ' + g.title + (g.trainer ? ' (тренер ' + g.trainer + ')' : '') + '.\nOlymp Pole, Боровая ул., 116, 3 этаж, офис 312.\nС собой топ и шорты. По желанию: средства сцепления, полотенце для протирки пилона, вода.';
@@ -185,21 +202,28 @@
   function vybratUroven(code) {
     lv = code;
     var b = blizhajshee();
-    if (b) den = b.i;
+    if (b) naDenPereiti(b.i);
     vseRisovat();
   }
+  function k(el) { el.scrollIntoView({ behavior: 'smooth' }); }
 
   document.addEventListener('click', function (ev) {
-    var t = ev.target.closest('[data-lv],[data-lv-set],[data-den],[data-id],[data-blizh]');
-    if (!t || !D) return;
-    if (t.dataset.lv) vybratUroven(t.dataset.lv === lv ? '' : t.dataset.lv);
+    var t = ev.target.closest('[data-lv],[data-lv-set],[data-den],[data-ned],[data-id],[data-blizh],[data-tarif],[data-tarif-sbros],[data-okno]');
+    if (!t) return;
+    if (t.dataset.okno) { otkrytOkno(t.dataset.okno); return; }
+    if (t.dataset.tarif) { tarif = t.dataset.tarif; risovatTarif(); postavitOplatu(); k($('#raspisanie')); return; }
+    if (t.hasAttribute('data-tarif-sbros')) { tarif = null; risovatTarif(); k($('#ceny')); return; }
+    if (!D) return;
+    if (t.dataset.lv) { vybratUroven(t.dataset.lv === lv ? '' : t.dataset.lv); }
     else if (t.hasAttribute('data-lv-set')) vybratUroven(t.dataset.lvSet);
+    else if (t.dataset.ned) { ned = +t.dataset.ned; den = ned * 7; var bb = null; for (var i = den; i < den + 7; i++) { if (naDen(dni[i]).some(podhodit)) { bb = i; break; } } if (bb !== null) den = bb; risovatDni(); risovatGruppy(); }
     else if (t.dataset.den) { den = +t.dataset.den; risovatDni(); risovatGruppy(); }
-    else if (t.hasAttribute('data-blizh')) { var b = blizhajshee(); if (b) { den = b.i; risovatDni(); risovatGruppy(); } }
+    else if (t.hasAttribute('data-blizh')) { var b = blizhajshee(); if (b) { naDenPereiti(b.i); risovatDni(); risovatGruppy(); } }
     else if (t.dataset.id) {
       vybor = najti(t.dataset.id);
+      postavitOplatu();
       risovatGruppy(); risovatVybor(); pokazatFormu();
-      $('#zapis').scrollIntoView({ behavior: 'smooth' });
+      k($('#zapis'));
       setTimeout(function () { imyaEl.focus({ preventScroll: true }); }, 600);
     }
   });
@@ -219,7 +243,7 @@
     oshibka(imyaEl, '#o-imya', !okImya); oshibka(telEl, '#o-tel', !okTel);
     if (!okImya) { imyaEl.focus(); return; }
     if (!okTel) { telEl.focus(); return; }
-    if (!vybor) { soobshenie('#o-otpr', 'Сначала выберите занятие в расписании.'); $('#raspisanie').scrollIntoView({ behavior: 'smooth' }); return; }
+    if (!vybor) { soobshenie('#o-otpr', 'Сначала выберите занятие в расписании.'); k($('#raspisanie')); return; }
     var g = vybor;
     var oplata = (document.querySelector('input[name=oplata]:checked') || {}).value || 'razovoe';
     idet = true; $('#go').disabled = true; $('#go').textContent = 'Отправляем…';
@@ -233,6 +257,7 @@
           var wait = j.status === 'wait';
           $('#gotovo-zag').textContent = j.dup ? 'Вы уже записаны' : wait ? 'Вы в листе ожидания' : 'Вы записаны';
           $('#itog').textContent = dataLong(g.date) + ', ' + vremya(g.time) + ', ' + g.title + (g.trainer ? ' (' + g.trainer + ')' : '') + '. ' +
+            (TARIFY[oplata] && oplata !== 'razovoe' ? 'Оплата: ' + TARIFY[oplata].kratko + '. ' : '') +
             (wait ? 'Если место освободится, студия напишет.' : 'Студия уже получила запись. Адрес: Боровая ул., 116, 3 этаж, офис 312.');
           var tk = $('#tg-knopka');
           if (j.tg) { tk.href = j.tg; tk.hidden = false; $('#tg-prim').hidden = false; } else { tk.hidden = true; $('#tg-prim').hidden = true; }
@@ -252,9 +277,22 @@
       .then(function () { idet = false; $('#go').disabled = false; risovatVybor(); });
   });
   function pokazatFormu() { $('#forma').hidden = false; $('#gotovo').hidden = true; document.body.classList.remove('zapisan'); lipkaya(); }
-  $('#snova').addEventListener('click', function () { pokazatFormu(); vybor = null; $('#vybrano').innerHTML = '<b>Занятие не выбрано</b><span>Выберите его в расписании выше</span>'; $('#raspisanie').scrollIntoView({ behavior: 'smooth' }); });
+  $('#snova').addEventListener('click', function () { pokazatFormu(); vybor = null; $('#vybrano').innerHTML = '<b>Занятие не выбрано</b><span>Выберите его в расписании выше</span>'; k($('#raspisanie')); });
 
-  // ---------- заявка на персональное ----------
+  // ---------- окно: персональное занятие или «мой абонемент» ----------
+  var okno = $('#okno'), oknoOtkuda = null;
+  function otkrytOkno(chto) {
+    oknoOtkuda = document.activeElement;
+    $('#okno-zag').textContent = chto === 'perso' ? 'Персональное занятие' : 'Мой абонемент';
+    $('#o-perso').hidden = chto !== 'perso'; $('#o-abon').hidden = chto !== 'abon';
+    okno.hidden = false; document.body.classList.add('okno-otkryto');
+    setTimeout(function () { var f = okno.querySelector('#o-' + chto + ' input:not([tabindex])'); if (f) f.focus(); }, 50);
+  }
+  function zakrytOkno() { okno.hidden = true; document.body.classList.remove('okno-otkryto'); if (oknoOtkuda) oknoOtkuda.focus(); }
+  $('#okno-x').addEventListener('click', zakrytOkno);
+  okno.addEventListener('click', function (e) { if (e.target === okno) zakrytOkno(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !okno.hidden) zakrytOkno(); });
+
   $('#perso-forma').addEventListener('submit', function (ev) {
     ev.preventDefault();
     var im = $('#p-imya'), tl = $('#p-tel');
@@ -267,7 +305,6 @@
       .catch(function (s) { soobshenie('#o-p-otpr', s === 429 ? 'Заявка уже отправлена, студия свяжется с вами.' : 'Не получилось отправить. Напишите студии во ВКонтакте.'); });
   });
 
-  // ---------- мой абонемент ----------
   $('#abon-forma').addEventListener('submit', function (ev) {
     ev.preventDefault();
     var nomer = $('#a-nomer').value.replace(/\D/g, ''), tel = $('#a-tel').value;
@@ -279,7 +316,7 @@
       .then(function (res) {
         if (res.s !== 200) { itog.hidden = true; soobshenie('#o-abon', 'Не нашли абонемент с таким номером и телефоном. Проверьте или спросите тренера.'); return; }
         var a = res.j, tochki = '';
-        for (var k = 0; k < a.total; k++) tochki += '<i' + (k < a.used ? ' class="z"' : '') + '></i>';
+        for (var i = 0; i < a.total; i++) tochki += '<i' + (i < a.used ? ' class="z"' : '') + '></i>';
         var istek = a.until && a.until < (D ? D.today : '');
         itog.innerHTML = '<b>' + esc(a.name) + ', абонемент №' + a.nomer + '</b><div class="tochki" aria-label="Отмечено ' + a.used + ' из ' + a.total + '">' + tochki + '</div>' +
           '<p>Осталось ' + a.left + ' из ' + a.total + (a.until ? ' · ' + (istek ? 'срок закончился ' : 'действует до ') + dataKor(a.until) : '') + (a.closed ? ' · закрыт' : '') + '</p>' +
@@ -289,7 +326,7 @@
       .catch(function () { soobshenie('#o-abon', 'Не получилось проверить. Попробуйте позже.'); });
   });
 
-  // ---------- кнопка внизу телефона: видна между первым экраном и формой записи ----------
+  // ---------- кнопка внизу телефона: видна между первым экраном и записью ----------
   var lip = $('#lipkaya'), vidHero = true, vidZap = false, vidRasp = false;
   function lipkaya() { lip.classList.toggle('vidno', !vidHero && !vidZap && !vidRasp && !document.body.classList.contains('zapisan')); }
   if ('IntersectionObserver' in window) {
@@ -318,7 +355,7 @@
   zagruzit(function () {
     for (var i = 0; i < 14; i++) dni.push(addDays(D.today, i));
     var b = blizhajshee();
-    if (b) den = b.i;
+    if (b) naDenPereiti(b.i);
     risovatNedelyu();
     vseRisovat();
   });
