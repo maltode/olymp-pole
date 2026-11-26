@@ -305,7 +305,8 @@
     var io3 = new IntersectionObserver(function (es) {
       if (es[0].isIntersecting) { karta.src = karta.dataset.src; io3.disconnect(); }
     }, { rootMargin: '400px' });
-    io3.observe(karta);
+    // ?nokarta — без карты (скриншоты-проверки: живая карта не даёт снимку закончиться)
+    if (location.search.indexOf('nokarta') < 0) io3.observe(karta);
   } else {
     $('#karta').src = $('#karta').dataset.src;
   }
