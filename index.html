@@ -202,9 +202,11 @@
             <li>Разовые занятия оплачиваются заранее, за 24 часа до начала.</li>
           </ul>
         </div>
+        <label class="soglasie"><input type="checkbox" id="soglasie" aria-describedby="o-soglasie"><span>Даю <a href="soglasie/" target="_blank" rel="noopener">согласие на обработку персональных данных</a></span></label>
+        <p class="oshibka" id="o-soglasie" hidden>Без согласия на обработку данных записаться нельзя</p>
         <button class="btn btn--shir knopka-otpr" type="submit" id="go">Записаться</button>
         <p class="oshibka" id="o-otpr" hidden></p>
-        <p class="melko">Имя и телефон увидит только студия, чтобы подтвердить запись.</p>
+        <p class="melko">Нажимая «Записаться», вы принимаете условия <a href="oferta/" target="_blank" rel="noopener">публичной оферты</a>. Имя и телефон увидит только студия, чтобы подтвердить запись.</p>
       </form>
       <div class="gotovo" id="gotovo" hidden>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>
@@ -339,6 +341,7 @@ Olymp Pole, Боровая ул., 116, 3 этаж, офис 312.
       <a href="tel:+79602408032">+7 960 240-80-32</a><a href="https://vk.ru/olymppole" target="_blank" rel="noopener">ВКонтакте</a><a href="https://t.me/olymp_pole" target="_blank" rel="noopener">Telegram</a><a href="https://www.instagram.com/olymp_pole" target="_blank" rel="noopener">Instagram*</a>
     </div>
   </div>
+  <nav class="dok-ssylki" aria-label="Документы"><a href="oferta/">Публичная оферта</a><a href="politika/">Политика обработки персональных данных</a><a href="soglasie/">Согласие на обработку персональных данных</a></nav>
   <p class="podval-melko">© Olymp Pole, 2026 · * Instagram принадлежит компании Meta, признанной экстремистской организацией и запрещённой в России.</p>
 </div></footer>
 
@@ -358,8 +361,11 @@ Olymp Pole, Боровая ул., 116, 3 этаж, офис 312.
         <p class="oshibka" id="o-p-tel" hidden>Проверьте номер: нужно 11 цифр</p>
         <label for="p-msg"><span data-dlya="perso">Когда удобно и что хотите</span><span data-dlya="arenda" hidden>Когда и на сколько часов</span> (необязательно)</label><textarea id="p-msg" maxlength="500" placeholder="Например: будни после 19:00, хочу освоить флаг"></textarea>
         <div class="lovushka" aria-hidden="true"><input id="p-site" tabindex="-1" autocomplete="off"></div>
+        <label class="soglasie"><input type="checkbox" id="p-soglasie" aria-describedby="o-p-soglasie"><span>Даю <a href="soglasie/" target="_blank" rel="noopener">согласие на обработку персональных данных</a></span></label>
+        <p class="oshibka" id="o-p-soglasie" hidden>Без согласия на обработку данных заявку отправить нельзя</p>
         <button class="btn btn--shir knopka-otpr" type="submit">Отправить заявку</button>
         <p class="oshibka" id="o-p-otpr" hidden></p>
+        <p class="melko">Отправляя заявку, вы принимаете условия <a href="oferta/" target="_blank" rel="noopener">публичной оферты</a>.</p>
       </form>
       <div class="itog-abon" id="perso-gotovo" hidden><b>Заявка отправлена.</b><p>Студия свяжется с вами по телефону или в мессенджере.</p></div>
     </div>

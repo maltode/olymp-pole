@@ -243,6 +243,8 @@
     oshibka(imyaEl, '#o-imya', !okImya); oshibka(telEl, '#o-tel', !okTel);
     if (!okImya) { imyaEl.focus(); return; }
     if (!okTel) { telEl.focus(); return; }
+    var sogl = $('#soglasie'); $('#o-soglasie').hidden = sogl.checked;
+    if (!sogl.checked) { sogl.focus(); return; }
     if (!vybor) { soobshenie('#o-otpr', 'Сначала выберите занятие в расписании.'); k($('#raspisanie')); return; }
     var g = vybor;
     var oplata = (document.querySelector('input[name=oplata]:checked') || {}).value || 'razovoe';
@@ -300,12 +302,15 @@
   okno.addEventListener('click', function (e) { if (e.target === okno) zakrytOkno(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !okno.hidden) zakrytOkno(); });
 
+  ['soglasie', 'p-soglasie'].forEach(function (id) { $('#' + id).addEventListener('change', function () { if (this.checked) $('#o-' + id).hidden = true; }); });
   $('#perso-forma').addEventListener('submit', function (ev) {
     ev.preventDefault();
     var im = $('#p-imya'), tl = $('#p-tel');
     var a = !!im.value.trim(), b = telOk(tl.value);
     oshibka(im, '#o-p-imya', !a); oshibka(tl, '#o-p-tel', !b);
     if (!a) { im.focus(); return; } if (!b) { tl.focus(); return; }
+    var ps = $('#p-soglasie'); $('#o-p-soglasie').hidden = ps.checked;
+    if (!ps.checked) { ps.focus(); return; }
     soobshenie('#o-p-otpr', '');
     fetch(API + '/perso', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: im.value.trim(), phone: tl.value.trim(), msg: $('#p-msg').value.trim(), tip: zayavka, site: $('#p-site').value }) })
       .then(function (r) { if (!r.ok) throw r.status; $('#perso-forma').hidden = true; $('#perso-gotovo').hidden = false; })
