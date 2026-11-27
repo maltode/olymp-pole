@@ -158,3 +158,10 @@ label.gal{display:flex;align-items:center;gap:8px;font-weight:400;font-size:var(
   .blok .ur{display:block}
   .blok .ur::before{content:none}
 }
+
+/* Ссылки для тренеров во вкладке «Расписание» (27.11) */
+#trenery-spisok{margin:8px 0 16px}
+#trenery-spisok li{display:grid;gap:4px}
+.tr-knopki{display:flex;flex-wrap:wrap;gap:0 16px}
+.ssylka.opasno{color:var(--err)}
+#f-trener select{flex:1 1 160px}

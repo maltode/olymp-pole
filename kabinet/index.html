@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#14100E">
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link rel="stylesheet" href="kabinet.css?v=20261127k">
+<link rel="stylesheet" href="kabinet.css?v=20261127t">
 </head>
 <body>
 <header class="verh">
@@ -61,6 +61,12 @@
   <section id="t-rasp" class="vkladka" hidden>
     <div class="ryad"><p class="prim">Изменения сразу видны на сайте.</p><button type="button" class="btn" id="gr-novaya">Добавить группу</button></div>
     <div id="rasp-spisok"></div>
+    <div class="zal-den" id="trenery-blok">
+      <h3>Ссылки для тренеров</h3>
+      <p class="prim">По личной ссылке тренер видит только свои занятия с именами записанных (без телефонов) и свои брони зала. Аренду или персональное тренера отмечайте в «Зале» полем «Тренер».</p>
+      <ul id="trenery-spisok"></ul>
+      <form class="ryad" id="f-trener"><select id="tr-imya" aria-label="Тренер"></select><button class="btn" type="submit">Выдать ссылку</button></form>
+    </div>
   </section>
 </main>
 
@@ -80,6 +86,6 @@
 </div>
 <div class="tost" id="tost" role="status" hidden></div>
 
-<script src="kabinet.js?v=20261127k"></script>
+<script src="kabinet.js?v=20261127t"></script>
 </body>
 </html>

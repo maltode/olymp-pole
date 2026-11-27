@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Мои занятия · Olymp Pole</title>
+<meta name="theme-color" content="#14100E">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../kabinet/kabinet.css?v=20261127t">
+<style>
+  /* Страница тренера по личной ссылке: свои группы и брони зала на 2 недели, только просмотр */
+  body{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+  .den-zag{margin:24px 0 8px;font-size:var(--fs);color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
+  .den-zag:first-child{margin-top:8px}
+  .zan.ku{border-color:var(--ku)}.zan.k15{border-color:var(--k15)}.zan.kr{border-color:var(--kr)}
+  .zan.ar{border-color:var(--ar)}.zan.pe{border-color:var(--acc)}
+  .zan.otm{opacity:.6}
+  .imena{padding:16px;font-size:var(--fs)}
+  .imena{display:grid;gap:8px}
+  .imena .prim{margin:0}
+  @media (min-width:900px){ #dni{display:grid;grid-template-columns:1fr 1fr;gap:0 16px;align-items:start} .den{break-inside:avoid} }
+</style>
+</head>
+<body>
+<header class="verh">
+  <b class="imya"><img src="../img/logo.png" width="342" height="120" alt="Olymp Pole"></b>
+  <span class="kto" id="kto">тренер</span>
+</header>
+
+<main>
+  <section id="zagruzka" class="pusto"><p>Загружаем ваши занятия…</p></section>
+  <section id="oshibka" class="pusto" hidden>
+    <h1>Ссылка не работает</h1>
+    <p>Возможно, её отозвали или скопировали не целиком. Попросите у Софии новую ссылку.</p>
+  </section>
+  <section id="spisok" hidden>
+    <p class="prim">Ваши занятия и брони зала на 2 недели вперёд. Данные обновляются при каждом открытии страницы.</p>
+    <div id="dni"></div>
+  </section>
+</main>
+
+<script src="trener.js?v=20261127t"></script>
+</body>
+</html>

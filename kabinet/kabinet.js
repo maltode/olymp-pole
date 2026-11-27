@@ -404,7 +404,51 @@
       }
       $('#rasp-spisok').innerHTML = out || '<p class="pustaya">Групп пока нет.</p>';
     }).catch(function () {});
+    risTrenery();
   }
+
+  // ----- личные ссылки тренеров (27.11): выдать, скопировать, отправить в Telegram, отозвать -----
+  var trenery = [];
+  function risTrenery() {
+    api('trenery').then(function (j) {
+      trenery = j.list;
+      $('#trenery-spisok').innerHTML = j.list.length ? j.list.map(function (t) {
+        return '<li><div class="chel-v"><b>' + esc(t.name) + '</b><span class="prim">выдана ' + (t.added ? dkor(t.added) : '') + '</span></div>' +
+          '<div class="tr-knopki"><button type="button" class="ssylka" data-tr-kop="' + t.id + '">Скопировать ссылку</button>' +
+          '<button type="button" class="ssylka" data-tr-otp="' + t.id + '">Отправить в Telegram</button>' +
+          '<button type="button" class="ssylka opasno" data-tr-del="' + t.id + '">Отозвать</button></div></li>';
+      }).join('') : '<li class="prim">Ссылок пока нет.</li>';
+      var est = j.list.map(function (t) { return t.name; });
+      var svob = j.imena.filter(function (n) { return est.indexOf(n) < 0; });
+      $('#tr-imya').innerHTML = svob.map(function (n) { return '<option>' + esc(n) + '</option>'; }).join('');
+      $('#f-trener').hidden = !svob.length;
+    }).catch(function () {});
+  }
+  function trKopirovat(link) {
+    var pokazat = function () { okno('Ссылка для тренера', '<p class="prim">Скопируйте ссылку и отправьте тренеру.</p><input readonly value="' + esc(link) + '" onfocus="this.select()">'); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(link).then(function () { tost('Ссылка скопирована'); }, pokazat);
+    else pokazat();
+  }
+  function trOtpravit(t) {
+    var u = 'https://t.me/share/url?url=' + encodeURIComponent(t.link) + '&text=' + encodeURIComponent(t.name + ', это ваша личная ссылка: ваши занятия, записанные и брони зала Olymp Pole. Никому её не пересылайте.');
+    if (tgw && tgw.openTelegramLink) tgw.openTelegramLink(u); else window.open(u, '_blank', 'noopener');
+  }
+  $('#f-trener').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var name = $('#tr-imya').value;
+    if (!name) return;
+    api('trener_new', { name: name }).then(function (j) { tost('Ссылка для ' + name + ' готова'); risTrenery(); trKopirovat(j.link); }).catch(function () {});
+  });
+  $('#trenery-blok').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    var t = trenery.filter(function (x) { return x.id === +(b.dataset.trKop || b.dataset.trOtp || b.dataset.trDel); })[0];
+    if (!t) return;
+    if (b.dataset.trKop) trKopirovat(t.link);
+    else if (b.dataset.trOtp) trOtpravit(t);
+    else if (b.dataset.trDel) sprosit('Отозвать ссылку ' + t.name + '? Старая ссылка сразу перестанет работать, новую можно выдать здесь же.').then(function (y) {
+      if (y) api('trener_del', { id: t.id }).then(function () { tost('Ссылка отозвана'); risTrenery(); }).catch(function () {});
+    });
+  });
   function grForma(g) {
     g = g || { dow: 1, time: '18:00', dur: 60, title: 'Pole sport', level: '', trainer: '', mest: 6, price: 1200, abon: 1 };
     var lv = g.level ? g.level.split(',') : [];
