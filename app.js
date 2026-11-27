@@ -29,10 +29,12 @@
   };
   var TARIFY = {
     razovoe: { imya: 'Разовое занятие', kratko: 'разовое занятие, 1 200 ₽, оплата за 24 часа до занятия' },
+    razovoe15: { imya: 'Разовое занятие 1,5 часа', kratko: 'разовое занятие 1,5 часа, 1 500 ₽, оплата за 24 часа до занятия' },
     kupit4: { imya: 'Абонемент на 4 занятия', kratko: 'абонемент на 4 занятия, 4 200 ₽ в студии' },
     kupit8: { imya: 'Абонемент на 8 занятий', kratko: 'абонемент на 8 занятий, 8 000 ₽ в студии' }
   };
 
+  function dlit(m) { return m === 60 ? '1 час' : m === 90 ? '1,5 часа' : m === 120 ? '2 часа' : m + ' мин'; }
   function levelText(l) { return l ? l.split(',').map(function (x) { return LV[x] || x; }).join(' и ') : 'все уровни'; }
   function d(iso) { return new Date(iso + 'T00:00:00Z'); }
   function dataLong(iso) { var x = d(iso); return DN[x.getUTCDay()] + ', ' + x.getUTCDate() + ' ' + MES[x.getUTCMonth()]; }
@@ -110,8 +112,10 @@
     var gg = naDen(dni[den]).filter(podhodit);
     var el = $('#zanyatiya');
     if (!gg.length) {
-      el.innerHTML = '<li class="pustoj">' + (den === 0 ? 'На сегодня подходящих групп больше нет.' : 'В этот день подходящих групп нет.') +
-        ' <button type="button" class="ssylka" data-blizh>Показать ближайшее занятие</button></li>';
+      var drugie = lv ? naDen(dni[den]).filter(function (x) { return !x.cancelled; }) : [];
+      el.innerHTML = '<li class="pustoj">' + (drugie.length
+        ? 'Для уровня «' + URS[lv].imya + '» в этот день групп нет. Есть для других уровней: ' + drugie.map(function (x) { return vremya(x.time) + ' ' + esc(x.title) + ' (' + levelText(x.level) + ')'; }).join(', ') + '. <button type="button" class="ssylka" data-lv-set="">Показать все уровни</button>'
+        : (den === 0 ? 'На сегодня подходящих групп больше нет.' : 'В этот день подходящих групп нет.') + ' <button type="button" class="ssylka" data-blizh>Показать ближайшее занятие</button>') + '</li>';
       return;
     }
     el.innerHTML = gg.map(function (g) {
@@ -120,7 +124,7 @@
       return '<li class="zn' + (g.cancelled ? ' otm' : g.free ? '' : ' polno') + (moya ? ' vybrano' : '') + '">' +
         '<div class="zn-vr"><time>' + vremya(g.time) + '</time><small>до ' + vremya(g.end) + '</small></div>' +
         '<div class="zn-o"><b>' + esc(g.title) + '</b><span class="zn-meta"><span class="ur">' + levelText(g.level) + '</span>' +
-        (g.trainer ? '<span>' + esc(g.trainer) + '</span>' : '') + (g.price !== 1200 ? '<span>' + rub(g.price) + '</span>' : '') + '</span></div>' +
+        (g.trainer ? '<span>' + esc(g.trainer) + '</span>' : '') + (g.price !== 1200 ? '<span>' + rub(g.price) + '</span>' : '') + (g.abon ? '' : '<span class="razovo">' + dlit(g.dur) + ', только разово</span>') + '</span></div>' +
         '<div class="zn-d">' + mestaTekst(g) + knopka + '</div></li>';
     }).join('');
   }
@@ -168,11 +172,11 @@
     var el = $('#vybor-tarif');
     if (!tarif) { el.hidden = true; return; }
     el.hidden = false;
-    el.innerHTML = '<span><b>' + TARIFY[tarif].imya + '.</b> ' + (tarif === 'razovoe' ? 'Выберите занятие ниже.' : 'Выберите первое занятие ниже, абонемент оформят в студии.') + '</span>' +
+    el.innerHTML = '<span><b>' + TARIFY[tarif].imya + '.</b> ' + (tarif === 'razovoe' ? 'Выберите занятие ниже.' : tarif === 'razovoe15' ? 'Выберите занятие 1,5 часа ниже (СФП + Pole sport).' : 'Выберите первое занятие ниже, абонемент оформят в студии.') + '</span>' +
       '<button type="button" class="ssylka" data-tarif-sbros>Изменить</button>';
   }
   function postavitOplatu() {
-    var r = document.querySelector('input[name=oplata][value=' + (tarif || 'razovoe') + ']');
+    var r = document.querySelector('input[name=oplata][value=' + (!tarif || tarif === 'razovoe15' ? 'razovoe' : tarif) + ']');
     if (r && !r.disabled) r.checked = true;
   }
 
@@ -184,7 +188,7 @@
     $('#vybrano').innerHTML = '<b>' + dataLong(g.date) + ', ' + vremya(g.time) + '–' + vremya(g.end) + '</b><span>' + esc(g.title) + ' · ' + levelText(g.level) +
       (g.trainer ? ' · ' + esc(g.trainer) : '') + ' · ' + (g.free ? 'свободно ' + g.free + ' ' + mest(g.free) : 'мест нет, лист ожидания') + '</span>';
     $('#go').textContent = g.free ? 'Записаться' : 'Встать в лист ожидания';
-    $('#cena-raz').textContent = rub(g.price) + ', оплата за 24 часа до занятия';
+    $('#cena-raz').textContent = rub(g.price) + ' за ' + dlit(g.dur) + ', оплата за 24 часа до занятия';
     var bezAbon = !g.abon;
     $$('input[name=oplata]').forEach(function (r) { if (r.value !== 'razovoe') r.disabled = bezAbon; });
     if (bezAbon) document.querySelector('input[name=oplata][value=razovoe]').checked = true;
@@ -276,13 +280,20 @@
   $('#snova').addEventListener('click', function () { pokazatFormu(); vybor = null; $('#vybrano').innerHTML = '<b>Занятие не выбрано</b><span>Выберите его в расписании выше</span>'; k($('#raspisanie')); });
 
   // ---------- окно: персональное занятие или «мой абонемент» ----------
-  var okno = $('#okno'), oknoOtkuda = null;
+  var okno = $('#okno'), oknoOtkuda = null, zayavka = 'perso';
   function otkrytOkno(chto) {
     oknoOtkuda = document.activeElement;
-    $('#okno-zag').textContent = chto === 'perso' ? 'Персональное занятие' : 'Мой абонемент';
-    $('#o-perso').hidden = chto !== 'perso'; $('#o-abon').hidden = chto !== 'abon';
+    var forma = chto === 'perso' || chto === 'arenda';
+    if (forma) {
+      zayavka = chto;
+      $$('#o-perso [data-dlya]').forEach(function (e) { e.hidden = e.dataset.dlya !== chto; });
+      $('#p-msg').placeholder = chto === 'arenda' ? 'Например: суббота 14:00–16:00' : 'Например: будни после 19:00, хочу освоить флаг';
+      $('#perso-forma').hidden = false; $('#perso-gotovo').hidden = true; soobshenie('#o-p-otpr', '');
+    }
+    $('#okno-zag').textContent = chto === 'perso' ? 'Персональное занятие' : chto === 'arenda' ? 'Аренда зала' : 'Мой абонемент';
+    $('#o-perso').hidden = !forma; $('#o-abon').hidden = chto !== 'abon';
     okno.hidden = false; document.body.classList.add('okno-otkryto');
-    setTimeout(function () { var f = okno.querySelector('#o-' + chto + ' input:not([tabindex])'); if (f) f.focus(); }, 50);
+    setTimeout(function () { var f = okno.querySelector('#o-' + (forma ? 'perso' : chto) + ' input:not([tabindex])'); if (f) f.focus(); }, 50);
   }
   function zakrytOkno() { okno.hidden = true; document.body.classList.remove('okno-otkryto'); if (oknoOtkuda) oknoOtkuda.focus(); }
   $('#okno-x').addEventListener('click', zakrytOkno);
@@ -296,7 +307,7 @@
     oshibka(im, '#o-p-imya', !a); oshibka(tl, '#o-p-tel', !b);
     if (!a) { im.focus(); return; } if (!b) { tl.focus(); return; }
     soobshenie('#o-p-otpr', '');
-    fetch(API + '/perso', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: im.value.trim(), phone: tl.value.trim(), msg: $('#p-msg').value.trim(), site: $('#p-site').value }) })
+    fetch(API + '/perso', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: im.value.trim(), phone: tl.value.trim(), msg: $('#p-msg').value.trim(), tip: zayavka, site: $('#p-site').value }) })
       .then(function (r) { if (!r.ok) throw r.status; $('#perso-forma').hidden = true; $('#perso-gotovo').hidden = false; })
       .catch(function (s) { soobshenie('#o-p-otpr', s === 429 ? 'Заявка уже отправлена, студия свяжется с вами.' : 'Не получилось отправить. Напишите студии во ВКонтакте.'); });
   });
@@ -315,7 +326,7 @@
         for (var i = 0; i < a.total; i++) tochki += '<i' + (i < a.used ? ' class="z"' : '') + '></i>';
         var istek = a.until && a.until < (D ? D.today : '');
         itog.innerHTML = '<b>' + esc(a.name) + ', абонемент №' + a.nomer + '</b><div class="tochki" aria-label="Отмечено ' + a.used + ' из ' + a.total + '">' + tochki + '</div>' +
-          '<p>Осталось ' + a.left + ' из ' + a.total + (a.until ? ' · ' + (istek ? 'срок закончился ' : 'действует до ') + dataKor(a.until) : '') + (a.closed ? ' · закрыт' : '') + '</p>' +
+          '<p>Осталось ' + a.left + ' из ' + a.total + (a.until ? ' · ' + (istek ? 'срок закончился ' : 'действует до ') + dataKor(a.until) : '') + (a.zamorozka ? ' · с заморозкой на неделю' : '') + (a.closed ? ' · закрыт' : '') + '</p>' +
           (a.dates.length ? '<p>Отмечены: ' + a.dates.map(dataKor).join(', ') + '</p>' : '<p>Посещений пока нет.</p>');
         itog.hidden = false;
       })

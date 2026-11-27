@@ -456,3 +456,15 @@ body.okno-otkryto{overflow:hidden}
 .vazhno ul{display:grid;gap:8px}
 .vazhno li{position:relative;padding-left:16px;font-size:var(--fs);line-height:1.55}
 .vazhno li::before{content:'';position:absolute;left:0;top:.65em;width:6px;height:6px;border-radius:50%;background:var(--gold)}
+
+/* 27.11, правки Софии (вторая партия): логотип в шапке, 6 карточек цен по 3 в ряд, «Очень важно» по видам занятий */
+.imya{display:block;line-height:0}
+.imya img{height:40px;width:auto}
+.vazhno--ceny{margin-top:32px;padding:24px}
+.vazhno-setka{display:grid;gap:16px}
+.vazhno-pod{font-size:var(--fs);font-weight:600;color:var(--ink);margin-bottom:8px}
+@media (min-width:768px){
+  .imya img{height:48px}
+  .vazhno-setka{grid-template-columns:repeat(3,1fr);gap:24px}
+}
+@media (min-width:1000px){.tarify{grid-template-columns:repeat(3,1fr)}}

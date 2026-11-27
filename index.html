@@ -36,7 +36,7 @@
 <body>
 
 <header class="shapka"><div class="wrap">
-  <a class="imya" href="#top">Olymp Pole</a>
+  <a class="imya" href="#top"><img src="img/logo.png" width="342" height="120" alt="Olymp Pole"></a>
   <nav aria-label="Разделы"><a href="#urovni">Уровни</a><a href="#ceny">Цены</a><a href="#raspisanie">Расписание</a><a href="#trenery">Тренеры</a><a href="#kontakty">Контакты</a></nav>
   <a class="btn btn--mal" href="#raspisanie">Записаться</a>
 </div></header>
@@ -89,23 +89,41 @@
 
 <section class="ceny" id="ceny"><div class="wrap">
   <div class="zag rv"><p class="kik">Цены</p><h2>Разово <em>или абонементом</em></h2>
-    <p class="pod">Выберите вариант, потом занятие в расписании. Оплата наличными или переводом, разовые и персональные занятия заранее, за 24 часа до начала.</p></div>
+    <p class="pod">Выберите вариант, потом занятие в расписании. Оплата наличными или переводом. Разовые и персональные занятия и аренду оплачивайте заранее, за 24 часа до начала.</p></div>
   <div class="tarify rv">
     <div class="tarif" data-t="razovoe"><h3>Разовое занятие</h3><p class="summa">1&nbsp;200&nbsp;₽</p><p>Групповое занятие, 1 час</p>
       <button type="button" class="tarif-kn" data-tarif="razovoe">Выбрать занятие <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button></div>
-    <div class="tarif" data-t="kupit4"><h3>Абонемент на 4 занятия</h3><p class="summa">4&nbsp;200&nbsp;₽</p><p>1&nbsp;050&nbsp;₽ за занятие</p>
+    <div class="tarif" data-t="kupit4"><h3>Абонемент на 4 занятия</h3><p class="summa">4&nbsp;200&nbsp;₽</p><p>1&nbsp;050&nbsp;₽ за занятие</p><p>Действует 30 дней, без заморозки</p>
       <button type="button" class="tarif-kn" data-tarif="kupit4">Выбрать абонемент <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button></div>
-    <div class="tarif glav" data-t="kupit8"><span class="metka">Выгоднее</span><h3>Абонемент на 8 занятий</h3><p class="summa">8&nbsp;000&nbsp;₽</p><p>1&nbsp;000&nbsp;₽ за занятие</p>
+    <div class="tarif glav" data-t="kupit8"><span class="metka">Выгоднее</span><h3>Абонемент на 8 занятий</h3><p class="summa">8&nbsp;000&nbsp;₽</p><p>1&nbsp;000&nbsp;₽ за занятие</p><p>Действует 30 дней, плюс заморозка на 1 неделю</p>
       <button type="button" class="tarif-kn" data-tarif="kupit8">Выбрать абонемент <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button></div>
+    <div class="tarif" data-t="razovoe15"><h3>Разовое занятие 1,5 часа</h3><p class="summa">1&nbsp;500&nbsp;₽</p><p>СФП + Pole sport, групповое занятие 1,5 часа. Оплачивается только разово</p>
+      <button type="button" class="tarif-kn" data-tarif="razovoe15">Выбрать занятие <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button></div>
     <div class="tarif tarif--perso"><h3>Персональное занятие</h3><p class="summa">от 3&nbsp;000&nbsp;₽</p><p>Один на один с тренером, время подбираем под вас</p>
       <button type="button" class="tarif-kn" data-okno="perso">Оставить заявку <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button></div>
+    <div class="tarif tarif--perso"><h3>Аренда зала</h3><p class="summa">1&nbsp;000&nbsp;₽ <small>за час</small></p><p>Три пилона pole 4 you (42 и 45 мм, высота 4 м), татами и креш-мат</p>
+      <button type="button" class="tarif-kn" data-okno="arenda">Оставить заявку <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button></div>
   </div>
   <div class="ceny-niz">
     <ul class="ceny-prim">
-      <li><b>Занятия 1,5 часа</b> (СФП + Pole sport) оплачиваются отдельно как разовое занятие: <b>1&nbsp;500&nbsp;₽</b>.</li>
-      <li>Абонемент действует <span class="zaglushka" id="srok">[срок уточняется]</span>, посещения отмечаются в электронном виде.</li>
+      <li><b>Занятия 1,5 часа</b> (СФП + Pole sport) оплачиваются только разово, <b>1&nbsp;500&nbsp;₽</b>, абонемент на них не действует.</li>
+      <li>Абонемент действует <b>30 дней</b>, это его максимальный срок. К абонементу на 8 занятий можно добавить заморозку на одну неделю, у абонемента на 4 занятия заморозки нет. Посещения отмечаются в электронном виде.</li>
     </ul>
     <button type="button" class="moj-abon" data-okno="abon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg><span><b>Уже есть абонемент?</b> Посмотрите, сколько занятий осталось</span></button>
+  </div>
+  <div class="vazhno vazhno--ceny rv" role="note">
+    <p class="vazhno-zag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>Очень важно</p>
+    <div class="vazhno-setka">
+      <div><p class="vazhno-pod">Групповые занятия</p><ul>
+        <li>Выписаться с занятия нужно минимум за 6 часов до его начала. Если вы не отменили запись как минимум за 6 часов до начала, оплата сгорает.</li>
+        <li>Разовые занятия оплачиваются заранее, за 24 часа до начала.</li></ul></div>
+      <div><p class="vazhno-pod">Персональные занятия</p><ul>
+        <li>Оплата персонального занятия минимум за 24 часа до начала.</li>
+        <li>Отмена или перенос персонального занятия минимум за 24 часа до начала, иначе оплата сгорает.</li></ul></div>
+      <div><p class="vazhno-pod">Аренда зала</p><ul>
+        <li>Оплата аренды минимум за 24 часа.</li>
+        <li>Отмена аренды минимум за 24 часа. При отмене менее чем за 24 часа оплата сгорает.</li></ul></div>
+    </div>
   </div>
 </div></section>
 
@@ -147,7 +165,7 @@
         <p class="oshibka" id="o-tel" hidden>Проверьте номер: нужно 11 цифр, например +7 900 000-00-00</p>
         <fieldset class="oplata" id="oplata">
           <legend class="leg">Как оплатите</legend>
-          <label class="var"><input type="radio" name="oplata" value="razovoe" checked><span>Разовое занятие <small id="cena-raz">1&nbsp;200&nbsp;₽, оплата за 24 часа до занятия</small></span></label>
+          <label class="var"><input type="radio" name="oplata" value="razovoe" checked><span>Разовое занятие <small id="cena-raz">1 час 1&nbsp;200&nbsp;₽, 1,5 часа 1&nbsp;500&nbsp;₽, оплата за 24 часа до занятия</small></span></label>
           <label class="var"><input type="radio" name="oplata" value="abon"><span>У меня есть абонемент <small id="abon-prim">спишем одно занятие</small></span></label>
           <label class="var"><input type="radio" name="oplata" value="kupit4"><span>Куплю абонемент на 4 занятия <small>4&nbsp;200&nbsp;₽ в студии, это занятие первое</small></span></label>
           <label class="var"><input type="radio" name="oplata" value="kupit8"><span>Куплю абонемент на 8 занятий <small>8&nbsp;000&nbsp;₽ в студии, это занятие первое</small></span></label>
@@ -157,8 +175,7 @@
           <p class="vazhno-zag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>Очень важно</p>
           <ul>
             <li>Выписаться с занятия нужно минимум за 6 часов до его начала. Если вы не отменили запись как минимум за 6 часов до начала, оплата сгорает.</li>
-            <li>Оплата персональных и разовых занятий производится заранее, за 24 часа до начала занятия.</li>
-            <li>Отмена персонального занятия возможна за 24 часа до начала. При отмене менее чем за 24 часа оплата сгорает.</li>
+            <li>Разовые занятия оплачиваются заранее, за 24 часа до начала.</li>
           </ul>
         </div>
         <button class="btn btn--shir knopka-otpr" type="submit" id="go">Записаться</button>
@@ -256,7 +273,7 @@ Olymp Pole, Боровая ул., 116, 3 этаж, офис 312.
     <div class="zag"><p class="kik">Вопросы</p><h2>Перед <em>первым разом</em></h2></div>
     <details><summary>Никогда не занимались. Можно?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><p>Да. Уровень «Начинающие» подходит тем, кто никогда не занимался спортом или занимался немного, специальная подготовка не нужна. Группы для начинающих<span id="faq-nach"></span>.</p></details>
     <details><summary>Сколько человек в группе?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><p>В зале 3 пилона. В группе не больше 6 человек (по двое на пилон, по предварительной договорённости с учениками). Сколько мест осталось, видно в расписании.</p></details>
-    <details><summary>Как оплатить?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><p>Наличными или переводом. Разовые и персональные занятия оплачиваются заранее, за 24 часа до начала. Абонемент можно купить на занятии.</p></details>
+    <details><summary>Как оплатить?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><p>Наличными или переводом. Разовые и персональные занятия и аренда оплачиваются заранее, за 24 часа до начала. Абонемент можно купить на занятии.</p></details>
     <details><summary>Не получается прийти. Что делать?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><p>Отмените запись минимум за 6 часов до начала занятия, иначе оплата сгорает. Если включили напоминания, нажмите «Не смогу» в боте. Или напишите студии во ВКонтакте или Telegram. Место освободится для другого человека.</p></details>
     <details><summary>Как найти студию?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><p>Боровая улица, 116, третий этаж, офис 312. Карта ниже.</p></details>
   </div>
@@ -305,14 +322,17 @@ Olymp Pole, Боровая ул., 116, 3 этаж, офис 312.
   <div class="okno-v" role="dialog" aria-modal="true" aria-labelledby="okno-zag">
     <div class="okno-shapka"><h3 id="okno-zag"></h3><button type="button" class="okno-x" id="okno-x" aria-label="Закрыть"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
     <div id="o-perso" hidden>
-      <p class="okno-pod">От 3&nbsp;000&nbsp;₽. Оставьте телефон: студия свяжется и предложит удобное время.</p>
-      <p class="okno-pod">Оплата заранее, за 24 часа до занятия. Отмена возможна за 24 часа до начала, при отмене менее чем за 24 часа оплата сгорает.</p>
+      <p class="okno-pod" data-dlya="perso">От 3&nbsp;000&nbsp;₽. Оставьте телефон: студия свяжется и предложит удобное время.</p>
+      <p class="okno-pod" data-dlya="perso">Оплата персонального занятия минимум за 24 часа до начала. Отмена или перенос персонального занятия минимум за 24 часа до начала, иначе оплата сгорает.</p>
+      <p class="okno-pod" data-dlya="arenda" hidden>1&nbsp;000&nbsp;₽ за час. Оставьте телефон: студия свяжется и предложит свободное время.</p>
+      <p class="okno-pod" data-dlya="arenda" hidden>Зал оборудован тремя пилонами от компании pole 4 you. Два пилона диаметром 42 мм и один 45 мм. В зале имеются татами и креш-мат. Высота пилонов 4 м. Покрытие пола: ламинат.</p>
+      <p class="okno-pod" data-dlya="arenda" hidden>Оплата аренды минимум за 24 часа. Отмена аренды минимум за 24 часа, при отмене менее чем за 24 часа оплата сгорает.</p>
       <form id="perso-forma" novalidate>
         <label for="p-imya">Имя</label><input id="p-imya" autocomplete="given-name" maxlength="60" aria-describedby="o-p-imya">
         <p class="oshibka" id="o-p-imya" hidden>Напишите имя</p>
         <label for="p-tel">Телефон</label><input id="p-tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 900 000-00-00" aria-describedby="o-p-tel">
         <p class="oshibka" id="o-p-tel" hidden>Проверьте номер: нужно 11 цифр</p>
-        <label for="p-msg">Когда удобно и что хотите (необязательно)</label><textarea id="p-msg" maxlength="500" placeholder="Например: будни после 19:00, хочу освоить флаг"></textarea>
+        <label for="p-msg"><span data-dlya="perso">Когда удобно и что хотите</span><span data-dlya="arenda" hidden>Когда и на сколько часов</span> (необязательно)</label><textarea id="p-msg" maxlength="500" placeholder="Например: будни после 19:00, хочу освоить флаг"></textarea>
         <div class="lovushka" aria-hidden="true"><input id="p-site" tabindex="-1" autocomplete="off"></div>
         <button class="btn btn--shir knopka-otpr" type="submit">Отправить заявку</button>
         <p class="oshibka" id="o-p-otpr" hidden></p>

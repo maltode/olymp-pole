@@ -224,7 +224,11 @@
       var a = j.abon;
       okno('Абонемент №' + a.id, '<p><b>' + esc(a.name) + '</b>' + (a.phone ? ' · <a href="' + telHref(a.phone) + '">' + tel(a.phone) + '</a>' : '') + '</p>' +
         '<p class="prim">Осталось ' + a.left + ' из ' + a.total + ' · куплен ' + dkor(a.bought) + ' · ' + (a.until ? 'до ' + dkor(a.until) : 'без срока') + (a.closed ? ' · закрыт' : '') + '</p>' +
-        (a.note ? '<p class="prim">' + esc(a.note) + '</p>' : '') + '<div style="margin:16px 0">' + tochki(a.total, a.used, true) + '</div>' +
+        (a.note ? '<p class="prim">' + esc(a.note) + '</p>' : '') +
+        (a.total === 8 && a.until ? (a.zamorozka
+          ? '<p class="prim">Заморозка с ' + dkor(a.zamorozka) + ': срок продлён на 7 дней. <button type="button" class="ssylka" id="e-zam-otm">Отменить заморозку</button></p>'
+          : '<p><button type="button" class="btn btn--kontur" id="e-zam7">Заморозить на 7 дней</button></p>') : '') +
+        '<div style="margin:16px 0">' + tochki(a.total, a.used, true) + '</div>' +
         '<form id="f-otm" class="dva"><input id="o-data" type="date" value="' + TODAY + '" aria-label="Дата посещения"><button class="btn" type="submit"' + (a.left ? '' : ' disabled') + '>Отметить занятие</button></form>' +
         '<ul class="otmetki" style="margin-top:16px">' + (j.marks.length ? j.marks.map(function (o) {
           return '<li><span>' + dlong(o.date) + (o.title ? ', ' + o.time.replace(/^0/, '') + ' ' + esc(o.title) : '') + '</span><button type="button" class="ssylka" data-otm-del="' + o.id + '">убрать</button></li>';
@@ -249,6 +253,17 @@
         ev.preventDefault();
         api('abon_edit', { id: a.id, name: $('#e-imya').value.trim(), phone: $('#e-tel').value.trim(), total: +$('#e-n').value, until: $('#e-do').value, note: $('#e-zam').value.trim() })
           .then(function () { tost('Сохранено'); abonKarta(a.id); risAbon(); }).catch(function () {});
+      });
+      var z7 = $('#e-zam7'), zo = $('#e-zam-otm');
+      if (z7) z7.addEventListener('click', function () {
+        sprosit('Заморозить абонемент на 7 дней? Срок продлится до ' + dkor(addDays(a.until, 7)) + '. Заморозка бывает один раз.').then(function (y) {
+          if (y) api('abon_freeze', { id: a.id }).then(function (r) { tost('Заморожен, действует до ' + dkor(r.until)); abonKarta(a.id); risAbon(); }).catch(function () {});
+        });
+      });
+      if (zo) zo.addEventListener('click', function () {
+        sprosit('Отменить заморозку? Срок вернётся на 7 дней назад.').then(function (y) {
+          if (y) api('abon_freeze', { id: a.id, otmena: true }).then(function () { tost('Заморозка отменена'); abonKarta(a.id); risAbon(); }).catch(function () {});
+        });
       });
       $('#e-zakr').addEventListener('click', function () {
         api('abon_edit', { id: a.id, closed: !a.closed }).then(function () { abonKarta(a.id); risAbon(); }).catch(function () {});
