@@ -468,3 +468,13 @@ body.okno-otkryto{overflow:hidden}
   .vazhno-setka{grid-template-columns:repeat(3,1fr);gap:24px}
 }
 @media (min-width:1000px){.tarify{grid-template-columns:repeat(3,1fr)}}
+
+/* 27.11, правка Софии п. 20–21: блок «Направления» */
+.napravleniya{padding:80px 0;border-top:1px solid var(--line)}
+.napr-setka{display:grid;gap:40px}
+.napr img{width:100%;aspect-ratio:4/5;object-fit:cover;border:1px solid var(--line)}
+.napr h3{margin-top:24px}
+.napr h3::after{content:"";display:block;width:48px;height:1px;margin-top:16px;background:var(--gold)}
+.napr p{margin-top:16px;font-size:var(--fs);color:var(--muted);max-width:65ch}
+.napr .ssylka{margin-top:16px;font-size:var(--fs)}
+@media (min-width:768px){.napr-setka{grid-template-columns:repeat(3,1fr);gap:24px}}
