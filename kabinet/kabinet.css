@@ -141,3 +141,20 @@ label.gal{display:flex;align-items:center;gap:8px;font-weight:400;font-size:var(
 }
 .neopl{color:var(--err)}
 .blok.pe .opl,.blok.ar .opl{font-weight:600}
+
+/* Правки Софии 27.11: виды групповых занятий своими цветами (персональное и аренда как были), уровень в карточке, логотип в шапке */
+:root{--ku:#6FCF9F;--ku-soft:#232F25;--k15:#EF8F6F;--k15-soft:#37241E;--kr:#B48CF0;--kr-soft:#2E2432}
+.blok.gr.ku{box-shadow:inset 0 0 0 2px var(--ku);background:var(--ku-soft)}
+.blok.gr.k15{box-shadow:inset 0 0 0 2px var(--k15);background:var(--k15-soft)}
+.blok.gr.kr{box-shadow:inset 0 0 0 2px var(--kr);background:var(--kr-soft)}
+.lg.ku{box-shadow:inset 0 0 0 2px var(--ku);background:var(--ku-soft)}
+.lg.k15{box-shadow:inset 0 0 0 2px var(--k15);background:var(--k15-soft)}
+.lg.kr{box-shadow:inset 0 0 0 2px var(--kr);background:var(--kr-soft)}
+.blok .ur{font-style:normal;font-weight:500}
+.blok .ur::before{content:' · '}
+.imya img{display:block;height:36px;width:auto}
+@media (min-width:900px){
+  :root{--hour:64px}
+  .blok .ur{display:block}
+  .blok .ur::before{content:none}
+}

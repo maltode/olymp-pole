@@ -277,6 +277,11 @@
 
   // =========== ЗАЛ ===========
   var nedFrom = null, zalDen = 0, zalData = null;
+  // Уровень коротко: «нач», «прод+профи»; для всех уровней (растяжка) ничего
+  var LV_KOR = { nach: 'нач', prod: 'прод', profi: 'профи' };
+  function lvKor(lv) { return lv ? lv.split(',').map(function (x) { return LV_KOR[x] || x; }).join('+') : ''; }
+  // Вид занятия для цвета (просьба Софии): 1,5 часа, растяжка, остальные по уровням
+  function vidZan(g) { return g.dur >= 90 ? 'k15' : /растяж/i.test(g.title) ? 'kr' : 'ku'; }
   function nachaloNedeli(iso) { var x = d(iso), dw = (x.getUTCDay() + 6) % 7; return addDays(iso, -dw); }
   function risZal() {
     api('zal_week', { from: nedFrom }).then(function (j) {
@@ -288,7 +293,8 @@
         var x = d(iso);
         return '<button type="button" class="dz' + (iso === TODAY ? ' segodnya' : '') + '" aria-selected="' + (i === zalDen) + '" data-zd="' + i + '">' + DN[x.getUTCDay()] + '<b>' + x.getUTCDate() + '</b></button>';
       }).join('');
-      var ot = mins(j.dayFrom), doo = mins(j.dayTo), H = 48;
+      // высота часа из CSS: на телефоне 48, на ПК 64 (три строки в карточке: занятие, уровень, тренер)
+      var ot = mins(j.dayFrom), doo = mins(j.dayTo), H = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hour')) || 48;
       var chasy = '<div class="chasy">'; for (var t = ot; t < doo; t += 60) chasy += '<span>' + hhmm(t).replace(/^0/, '') + '</span>'; chasy += '</div>';
       var kol = dni.map(function (iso, i) {
         var x = d(iso), s = '<div class="kol' + (i === zalDen ? ' vid' : '') + '"><div class="kol-zag' + (iso === TODAY ? ' segodnya' : '') + '">' + DN[x.getUTCDay()] + ' ' + x.getUTCDate() + '</div><div style="position:relative">';
@@ -308,7 +314,8 @@
           var shir = 'left:calc(' + (x.lane * 100 / n) + '% + 4px);right:auto;width:calc(' + (100 / n) + '% - 8px);';
           if (x.t === 'gr') {
             var g = x.g;
-            s += '<button type="button" class="blok gr" style="' + shir + poz(g.start, g.end) + '" data-gr="' + g.gid + '|' + iso + '"><b>' + g.start.replace(/^0/, '') + ' ' + esc(g.title) + '</b>' + esc(g.trainer) + ' · ' + g.zan + ' из ' + g.mest + '</button>';
+            var ur = lvKor(g.lv);
+            s += '<button type="button" class="blok gr ' + vidZan(g) + '" style="' + shir + poz(g.start, g.end) + '" data-gr="' + g.gid + '|' + iso + '"><b>' + g.start.replace(/^0/, '') + ' ' + esc(g.title) + (ur ? '<i class="ur">' + ur + '</i>' : '') + '</b>' + esc(g.trainer) + ' · ' + g.zan + ' из ' + g.mest + '</button>';
           } else {
             var z = x.z;
             s += '<button type="button" class="blok ' + (z.kind === 'arenda' ? 'ar' : 'pe') + '" style="' + shir + poz(z.start, z.end) + '" data-zal="' + z.id + '"><b>' + z.start.replace(/^0/, '') + '–' + z.end.replace(/^0/, '') + ' ' + (z.kind === 'arenda' ? 'Аренда' : 'Персональное') + '</b>' + esc(z.who) + ' · <span class="opl">' + (z.paid ? 'оплачено' : 'не оплачено') + '</span></button>';
