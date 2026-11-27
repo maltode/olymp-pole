@@ -225,9 +225,10 @@
       okno('Абонемент №' + a.id, '<p><b>' + esc(a.name) + '</b>' + (a.phone ? ' · <a href="' + telHref(a.phone) + '">' + tel(a.phone) + '</a>' : '') + '</p>' +
         '<p class="prim">Осталось ' + a.left + ' из ' + a.total + ' · куплен ' + dkor(a.bought) + ' · ' + (a.until ? 'до ' + dkor(a.until) : 'без срока') + (a.closed ? ' · закрыт' : '') + '</p>' +
         (a.note ? '<p class="prim">' + esc(a.note) + '</p>' : '') +
-        (a.total === 8 && a.until ? (a.zamorozka
-          ? '<p class="prim">Заморозка с ' + dkor(a.zamorozka) + ': срок продлён на 7 дней. <button type="button" class="ssylka" id="e-zam-otm">Отменить заморозку</button></p>'
-          : '<p><button type="button" class="btn btn--kontur" id="e-zam7">Заморозить на 7 дней</button></p>') : '') +
+        (a.total === 8 && a.until ? (a.zam_dni ? '<p class="prim">Заморожено ' + a.zam_dni + ' из 7 дней, срок продлён. <button type="button" class="ssylka" id="e-zam-otm">Отменить заморозку</button></p>' : '') +
+          (a.zam_dni < 7 ? '<form id="f-zam" class="dva"><select id="e-zam-dni" aria-label="Дней заморозки">' +
+            [1, 2, 3, 4, 5, 6, 7].filter(function (n) { return n <= 7 - a.zam_dni; }).map(function (n) { return '<option value="' + n + '"' + (n === 7 - a.zam_dni ? ' selected' : '') + '>' + n + ' ' + (n === 1 ? 'день' : n < 5 ? 'дня' : 'дней') + '</option>'; }).join('') +
+            '</select><button class="btn btn--kontur" type="submit">Заморозить</button></form>' : '') : '') +
         '<div style="margin:16px 0">' + tochki(a.total, a.used, true) + '</div>' +
         '<form id="f-otm" class="dva"><input id="o-data" type="date" value="' + TODAY + '" aria-label="Дата посещения"><button class="btn" type="submit"' + (a.left ? '' : ' disabled') + '>Отметить занятие</button></form>' +
         '<ul class="otmetki" style="margin-top:16px">' + (j.marks.length ? j.marks.map(function (o) {
@@ -254,14 +255,16 @@
         api('abon_edit', { id: a.id, name: $('#e-imya').value.trim(), phone: $('#e-tel').value.trim(), total: +$('#e-n').value, until: $('#e-do').value, note: $('#e-zam').value.trim() })
           .then(function () { tost('Сохранено'); abonKarta(a.id); risAbon(); }).catch(function () {});
       });
-      var z7 = $('#e-zam7'), zo = $('#e-zam-otm');
-      if (z7) z7.addEventListener('click', function () {
-        sprosit('Заморозить абонемент на 7 дней? Срок продлится до ' + dkor(addDays(a.until, 7)) + '. Заморозка бывает один раз.').then(function (y) {
-          if (y) api('abon_freeze', { id: a.id }).then(function (r) { tost('Заморожен, действует до ' + dkor(r.until)); abonKarta(a.id); risAbon(); }).catch(function () {});
+      var fz = $('#f-zam'), zo = $('#e-zam-otm');
+      if (fz) fz.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        var dni = +$('#e-zam-dni').value;
+        sprosit('Заморозить абонемент на ' + dni + ' ' + (dni === 1 ? 'день' : dni < 5 ? 'дня' : 'дней') + '? Срок продлится до ' + dkor(addDays(a.until, dni)) + '. Всего на абонемент можно до 7 дней.').then(function (y) {
+          if (y) api('abon_freeze', { id: a.id, dni: dni }).then(function (r) { tost('Заморожен, действует до ' + dkor(r.until)); abonKarta(a.id); risAbon(); }).catch(function () {});
         });
       });
       if (zo) zo.addEventListener('click', function () {
-        sprosit('Отменить заморозку? Срок вернётся на 7 дней назад.').then(function (y) {
+        sprosit('Отменить заморозку? Срок вернётся на ' + a.zam_dni + ' ' + (a.zam_dni === 1 ? 'день' : a.zam_dni < 5 ? 'дня' : 'дней') + ' назад.').then(function (y) {
           if (y) api('abon_freeze', { id: a.id, otmena: true }).then(function () { tost('Заморозка отменена'); abonKarta(a.id); risAbon(); }).catch(function () {});
         });
       });

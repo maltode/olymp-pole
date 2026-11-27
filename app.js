@@ -331,7 +331,7 @@
         for (var i = 0; i < a.total; i++) tochki += '<i' + (i < a.used ? ' class="z"' : '') + '></i>';
         var istek = a.until && a.until < (D ? D.today : '');
         itog.innerHTML = '<b>' + esc(a.name) + ', абонемент №' + a.nomer + '</b><div class="tochki" aria-label="Отмечено ' + a.used + ' из ' + a.total + '">' + tochki + '</div>' +
-          '<p>Осталось ' + a.left + ' из ' + a.total + (a.until ? ' · ' + (istek ? 'срок закончился ' : 'действует до ') + dataKor(a.until) : '') + (a.zamorozka ? ' · с заморозкой на неделю' : '') + (a.closed ? ' · закрыт' : '') + '</p>' +
+          '<p>Осталось ' + a.left + ' из ' + a.total + (a.until ? ' · ' + (istek ? 'срок закончился ' : 'действует до ') + dataKor(a.until) : '') + (a.zam_dni ? ' · с заморозкой на ' + a.zam_dni + ' ' + (a.zam_dni === 1 ? 'день' : a.zam_dni < 5 ? 'дня' : 'дней') : '') + (a.closed ? ' · закрыт' : '') + '</p>' +
           (a.dates.length ? '<p>Отмечены: ' + a.dates.map(dataKor).join(', ') + '</p>' : '<p>Посещений пока нет.</p>');
         itog.hidden = false;
       })
