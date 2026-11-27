@@ -449,3 +449,10 @@ body.okno-otkryto{overflow:hidden}
 @media (min-width:600px){.den .den-n{display:block}}
 .den{min-height:64px}
 @media (min-width:600px){.den{min-height:80px}}
+
+/* 27.11, правки Софии: блок «Очень важно» в форме записи (правила отмены и оплаты) */
+.vazhno{margin-top:24px;padding:16px;border:1px solid var(--gold);border-radius:var(--r);background:var(--acc-soft)}
+.vazhno-zag{display:flex;align-items:center;gap:8px;font-weight:600;color:var(--acc-d);margin-bottom:8px}
+.vazhno ul{display:grid;gap:8px}
+.vazhno li{position:relative;padding-left:16px;font-size:var(--fs);line-height:1.55}
+.vazhno li::before{content:'';position:absolute;left:0;top:.65em;width:6px;height:6px;border-radius:50%;background:var(--gold)}

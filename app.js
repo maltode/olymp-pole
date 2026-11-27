@@ -20,15 +20,15 @@
   var DN = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
   var DN_FULL = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
   var MES = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
-  var LV = { nach: 'новички', prod: 'продолжающие', profi: 'профи' };
+  var LV = { nach: 'начинающие', prod: 'продолжающие', profi: 'профи' };
   var URS = {
     // описания уровней — слова Софии (ТЗ 26.11, п. 11)
-    nach: { num: 'I', imya: 'Новичок', opis: 'Подходит для людей, которые никогда не занимались спортом или имеют небольшой опыт занятий. Иметь специальную подготовку необязательно.' },
+    nach: { num: 'I', imya: 'Начинающие', opis: 'Подходит для людей, которые никогда не занимались спортом или имеют небольшой опыт занятий. Иметь специальную подготовку необязательно.' },
     prod: { num: 'II', imya: 'Продолжающие', opis: 'Подходит для учеников, владеющих техникой основных базовых элементов (например: рогатка, шолдер, флаг).' },
     profi: { num: 'III', imya: 'Профи', opis: 'Подходит для учеников, уверенно владеющих техникой большинства базовых элементов.' }
   };
   var TARIFY = {
-    razovoe: { imya: 'Разовое занятие', kratko: 'разовое занятие, 1 200 ₽ в студии' },
+    razovoe: { imya: 'Разовое занятие', kratko: 'разовое занятие, 1 200 ₽, оплата за 24 часа до занятия' },
     kupit4: { imya: 'Абонемент на 4 занятия', kratko: 'абонемент на 4 занятия, 4 200 ₽ в студии' },
     kupit8: { imya: 'Абонемент на 8 занятий', kratko: 'абонемент на 8 занятий, 8 000 ₽ в студии' }
   };
@@ -82,7 +82,7 @@
         (gg.length ? '<p class="kik">Группы</p><p>' + gg.map(function (g) { return DN[g.dow] + ' ' + vremya(g.time) + (g.trainer ? ' (' + esc(g.trainer) + ')' : ''); }).join(', ') + '</p>' : '') +
         '<a class="ssylka" href="#raspisanie">Записаться в группу</a>';
     } else {
-      opis.innerHTML = '<p class="kik">Все уровни</p><h3>Выберите свой уровень</h3><p>Нажмите на уровень слева, и в расписании останутся только подходящие группы. Если сомневаетесь, начните с группы для новичков: тренер на занятии подскажет, куда двигаться дальше.</p>';
+      opis.innerHTML = '<p class="kik">Все уровни</p><h3>Выберите свой уровень</h3><p>Нажмите на уровень слева, и в расписании останутся только подходящие группы. Если сомневаетесь, начните с группы для начинающих: тренер на занятии подскажет, куда двигаться дальше.</p>';
     }
   }
 
@@ -158,12 +158,8 @@
       p.textContent = gg.length ? 'Ведёт: ' + gg.map(function (g) { return DN[g.dow] + ' ' + vremya(g.time); }).join(', ') : '';
     });
     var nach = gruppyUrovnya('nach');
-    $('#faq-nach').textContent = nach.length ? ': ' + nach.map(function (g) { return DN[g.dow] + ' ' + vremya(g.time); }).join(' и ') : '';
-    var maxM = Math.max.apply(null, D.groups.map(function (g) { return g.mest; }).concat([0]));
-    if (maxM) $('#faq-mest').textContent = maxM;
-    // «11 групп в неделю» в полосе с цифрами: считаем по настоящему расписанию
-    var n = D.groups.length, a = n % 10, b = n % 100;
-    if (n) $('#cifra-grupp').textContent = n + ' ' + ((a === 1 && b !== 11) ? 'группа' : (a >= 2 && a <= 4 && (b < 12 || b > 14)) ? 'группы' : 'групп');
+    var spis = nach.map(function (g) { return DN[g.dow] + ' ' + vremya(g.time); });
+    $('#faq-nach').textContent = spis.length ? ': ' + (spis.length > 1 ? spis.slice(0, -1).join(', ') + ' и ' + spis[spis.length - 1] : spis[0]) : '';
   }
 
   // ---------- выбранный тариф ----------
@@ -188,7 +184,7 @@
     $('#vybrano').innerHTML = '<b>' + dataLong(g.date) + ', ' + vremya(g.time) + '–' + vremya(g.end) + '</b><span>' + esc(g.title) + ' · ' + levelText(g.level) +
       (g.trainer ? ' · ' + esc(g.trainer) : '') + ' · ' + (g.free ? 'свободно ' + g.free + ' ' + mest(g.free) : 'мест нет, лист ожидания') + '</span>';
     $('#go').textContent = g.free ? 'Записаться' : 'Встать в лист ожидания';
-    $('#cena-raz').textContent = rub(g.price) + ' в студии';
+    $('#cena-raz').textContent = rub(g.price) + ', оплата за 24 часа до занятия';
     var bezAbon = !g.abon;
     $$('input[name=oplata]').forEach(function (r) { if (r.value !== 'razovoe') r.disabled = bezAbon; });
     if (bezAbon) document.querySelector('input[name=oplata][value=razovoe]').checked = true;
