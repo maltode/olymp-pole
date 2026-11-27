@@ -3,7 +3,7 @@
 (function () {
   'use strict';
   // На компьютере разработчика (localhost) — локальная копия сервера с тестовой базой
-  var API = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://127.0.0.1:8797' : 'https://olymp-pole-bot.capybaria-bot.workers.dev';
+  var API = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://127.0.0.1:8797' : 'https://d5dodm8kkkc2e00be9sq.y0g3kng5.apigw.yandexcloud.net';
   var $ = function (s) { return document.querySelector(s); };
   var tgw = window.Telegram && window.Telegram.WebApp;
   if (tgw) { try { tgw.ready(); tgw.expand(); tgw.setHeaderColor('#14100E'); tgw.setBackgroundColor('#14100E'); } catch (e) { /* старый Telegram */ } }
