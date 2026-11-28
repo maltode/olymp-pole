@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /kabinet/
+Disallow: /trener/
+
+Sitemap: https://olymppole.ru/sitemap.xml
