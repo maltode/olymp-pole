@@ -195,7 +195,7 @@
     $('#abon-prim').textContent = bezAbon ? 'на занятия 1,5 часа абонемент не действует' : 'спишем одно занятие';
     var imya = imyaEl.value.trim();
     $('#puzyr').textContent = 'Здравствуйте' + (imya ? ', ' + imya : '') + '! Напоминаем: завтра, ' + dataKor(g.date) + ', в ' + vremya(g.time) +
-      ' занятие ' + g.title + (g.trainer ? ' (тренер ' + g.trainer + ')' : '') + '.\nOlymp Pole, Боровая ул., 116, 3 этаж, офис 312.\nНа проходной скажите «На танцы» и покажите паспорт.\nС собой топ и шорты. По возможности: средства сцепления, полотенце для протирки пилона, вода.';
+      ' занятие ' + g.title + (g.trainer ? ' (тренер ' + g.trainer + ')' : '') + '.\nOlymp Pole, Боровая ул., 116, 3 этаж, кабинет 312.\nНа проходной скажите «На танцы» и покажите паспорт.\nС собой топ и шорты. По возможности: средства сцепления, полотенце для протирки пилона, вода.';
   }
 
   function vseRisovat() { risovatUroven(); risovatDni(); risovatGruppy(); risovatVybor(); }
@@ -260,7 +260,7 @@
           $('#gotovo-zag').textContent = j.dup ? 'Вы уже записаны' : wait ? 'Вы в листе ожидания' : 'Вы записаны';
           $('#itog').textContent = dataLong(g.date) + ', ' + vremya(g.time) + ', ' + g.title + (g.trainer ? ' (' + g.trainer + ')' : '') + '. ' +
             (TARIFY[oplata] && oplata !== 'razovoe' ? 'Оплата: ' + TARIFY[oplata].kratko + '. ' : '') +
-            (wait ? 'Если место освободится, студия напишет.' : 'Студия уже получила запись. Адрес: Боровая ул., 116, 3 этаж, офис 312.');
+            (wait ? 'Если место освободится, студия напишет.' : 'Студия уже получила запись. Адрес: Боровая ул., 116, 3 этаж, кабинет 312.');
           var tk = $('#tg-knopka');
           if (j.tg) { tk.href = j.tg; tk.hidden = false; $('#tg-prim').hidden = false; } else { tk.hidden = true; $('#tg-prim').hidden = true; }
           $('#forma').hidden = true; $('#gotovo').hidden = false;
