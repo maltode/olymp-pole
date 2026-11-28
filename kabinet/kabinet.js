@@ -280,8 +280,8 @@
   // Уровень коротко: «нач», «прод+профи»; для всех уровней (растяжка) ничего
   var LV_KOR = { nach: 'нач', prod: 'прод', profi: 'профи' };
   function lvKor(lv) { return lv ? lv.split(',').map(function (x) { return LV_KOR[x] || x; }).join('+') : ''; }
-  // Вид занятия для цвета (просьба Софии): 1,5 часа, растяжка, остальные по уровням
-  function vidZan(g) { return g.dur >= 90 ? 'k15' : /растяж/i.test(g.title) ? 'kr' : 'ku'; }
+  // Вид занятия для цвета (просьба Софии): 1,5 часа, растяжка, начинающие (27.11 вечером), продолжающие и профи
+  function vidZan(g) { return g.dur >= 90 ? 'k15' : /растяж/i.test(g.title) ? 'kr' : /(^|,)nach(,|$)/.test(g.lv || '') ? 'kn' : 'ku'; }
   function nachaloNedeli(iso) { var x = d(iso), dw = (x.getUTCDay() + 6) % 7; return addDays(iso, -dw); }
   function risZal() {
     api('zal_week', { from: nedFrom }).then(function (j) {

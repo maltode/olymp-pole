@@ -25,8 +25,8 @@
     if (iso === addDays(today, 1)) return 'Завтра, ' + s;
     return s;
   }
-  // цвет вида занятия как в «Зале» кабинета: 1,5 часа, растяжка, по уровням
-  function vid(g) { return mins(g.end) - mins(g.start) >= 90 ? 'k15' : /растяж/i.test(g.title) ? 'kr' : 'ku'; }
+  // цвет вида занятия как в «Зале» кабинета: 1,5 часа, растяжка, начинающие, продолжающие и профи
+  function vid(g) { return mins(g.end) - mins(g.start) >= 90 ? 'k15' : /растяж/i.test(g.title) ? 'kr' : /(^|,)nach(,|$)/.test(g.lv || '') ? 'kn' : 'ku'; }
 
   function kartaGr(g) {
     var lyudi = g.names.length ? '<p>Записаны: ' + g.names.map(esc).join(', ') + '</p>' : '<p class="prim">Пока никто не записан</p>';
