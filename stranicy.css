@@ -1,0 +1,79 @@
+/* Olymp Pole: отдельные страницы «О студии» и «Как нас найти» (28.11, по просьбе Софии). Основа: style.css */
+.str-verh{padding:32px 0 48px}
+.nazad{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin-bottom:16px;font-size:var(--fs);font-weight:600;color:var(--muted);transition:color .3s ease-out}
+.nazad:hover{color:var(--acc)}
+.str-verh h1{margin:16px 0 24px;max-width:14ch}
+.str-verh .fakty{margin-top:32px}
+.shapka nav a[aria-current="page"]{border-color:var(--gold);color:var(--acc-d)}
+.str-blok{padding:64px 0;border-top:1px solid var(--line)}
+.str-blok .zag{margin-bottom:32px}
+
+/* видео и фото в рамке, как фото зала на главной */
+.ramka{border:1px solid var(--line);padding:8px;background:var(--surface)}
+.ramka video,.ramka img{display:block;width:100%;height:auto;background:var(--night)}
+.ramka figcaption{font-size:var(--fs);color:var(--muted);padding:8px 0 0}
+
+/* ===== Как нас найти ===== */
+.plashka{display:grid;gap:16px;padding:32px 24px;border:1px solid var(--gold);background:var(--acc-soft)}
+.plashka h2{font-size:clamp(32px,4vw,48px)}
+.plashka p{max-width:60ch}
+.plashka b{color:var(--acc-d);font-weight:600}
+.marshrut{display:grid;gap:24px;padding:64px 0;border-top:1px solid var(--line);grid-template-areas:"zag" "video" "shagi"}
+.marshrut .m-zag{grid-area:zag}
+.marshrut .ramka{grid-area:video}
+.marshrut .shagi{grid-area:shagi}
+.marshrut:first-child{border-top:0;padding-top:0}
+.marshrut .ramka{width:min(100%,360px);justify-self:center}
+.marshrut h2{margin-top:16px}
+.udobnee{display:inline-block;margin-left:8px;padding:0 8px;border:1px solid var(--gold);border-radius:24px;color:var(--acc-d);letter-spacing:.08em}
+.shagi{counter-reset:n;display:grid;gap:16px;max-width:52ch}
+.shagi li{counter-increment:n;display:grid;grid-template-columns:40px 1fr;gap:16px;align-items:baseline}
+.shagi li::before{content:counter(n);font:600 var(--ft)/1 'Cormorant Garamond',Georgia,serif;color:var(--acc)}
+.shagi b{font-weight:600}
+.punkty{display:grid;gap:16px;max-width:60ch}
+.punkty li{display:grid;grid-template-columns:24px 1fr;gap:16px}
+.punkty svg{color:var(--acc);margin-top:4px}
+.dva{display:grid;gap:32px}
+.str-karta{background:var(--night);color:var(--night-ink);padding:64px 0 80px}
+.str-karta .karta{margin-top:32px}
+.str-dejstvie{display:grid;gap:16px;justify-items:start;margin-top:48px}
+.str-dejstvie p{color:var(--night-muted);max-width:52ch}
+
+/* ===== О студии ===== */
+.ryad{display:grid;gap:16px}
+.chetyre,.tri{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.chetyre .ramka,.tri .ramka{padding:4px}
+.chetyre figcaption{padding:8px 4px 4px}
+.chetyre video{aspect-ratio:9/16;object-fit:cover}
+.tri img{aspect-ratio:3/4;object-fit:cover}
+.tri>:last-child{grid-column:span 2}
+.foto-knopka{display:block;width:100%;padding:0;cursor:zoom-in}
+.zal-tekst{display:grid;gap:16px;max-width:60ch;color:var(--muted)}
+.prosmotr{width:min(100vw - 32px,900px);max-height:calc(100vh - 32px);padding:0;border:1px solid var(--gold);background:var(--night);color:var(--ink)}
+.prosmotr::backdrop{background:rgba(13,10,9,.9)}
+.prosmotr img{display:block;width:100%;height:auto;max-height:calc(100vh - 34px);object-fit:contain}
+.prosmotr button{position:absolute;top:8px;right:8px;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:rgba(13,10,9,.72);color:var(--ink)}
+
+.lipkaya.vsegda{transform:none}
+
+@media (min-width:768px){
+  .str-verh{padding:48px 0 64px}
+  .str-blok{padding:80px 0}
+  .plashka{padding:40px 48px}
+  .marshrut{grid-template-columns:300px 1fr;grid-template-rows:auto 1fr;grid-template-areas:"video zag" "video shagi";gap:24px 48px;align-items:start}
+  .marshrut .ramka{width:100%}
+  .marshrut:nth-child(2){grid-template-columns:1fr 300px;grid-template-areas:"zag video" "shagi video"}
+  .dva{grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+  .ryad{grid-template-columns:1fr 1fr}
+  .chetyre{grid-template-columns:repeat(4,1fr);gap:16px}
+  .tri{grid-template-columns:repeat(3,1fr);gap:16px}
+  .tri>:last-child{grid-column:auto}
+  .chetyre .ramka,.tri .ramka{padding:8px}
+}
+@media (min-width:900px){
+  .lipkaya.vsegda{display:none}
+}
+@media (min-width:1024px){
+  .marshrut{grid-template-columns:360px 1fr;column-gap:64px}
+  .marshrut:nth-child(2){grid-template-columns:1fr 360px}
+}

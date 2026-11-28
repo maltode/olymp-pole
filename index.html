@@ -17,7 +17,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="preload" as="image" href="img/zal-vecher.webp">
 <link rel="preconnect" href="https://d5dodm8kkkc2e00be9sq.y0g3kng5.apigw.yandexcloud.net">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=20261128s">
 <script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "SportsActivityLocation",
@@ -38,7 +38,7 @@
 
 <header class="shapka"><div class="wrap">
   <a class="imya" href="#top"><img src="img/logo.png" width="342" height="120" alt="Olymp Pole"></a>
-  <nav aria-label="Разделы"><a href="#napravleniya">Направления</a><a href="#urovni">Уровни</a><a href="#ceny">Цены</a><a href="#raspisanie">Расписание</a><a href="#trenery">Тренеры</a><a href="#kontakty">Контакты</a></nav>
+  <nav aria-label="Разделы"><a href="#napravleniya">Направления</a><a href="#urovni">Уровни</a><a href="#ceny">Цены</a><a href="#raspisanie">Расписание</a><a href="#trenery">Тренеры</a><a href="o-studii/">О студии</a><a href="kak-nas-najti/">Как нас найти</a><a href="#kontakty">Контакты</a></nav>
   <a class="btn btn--mal" href="#raspisanie">Записаться</a>
 </div></header>
 
@@ -57,7 +57,7 @@
   <!-- Фото зала, переделанное в Gemini 26.11: вечер, тёплый свет, ученицы на пилонах (оригинал img/zal-okna.webp) -->
   <figure class="arka"><img src="img/zal-vecher.webp" width="1376" height="768" alt="Зал Olymp Pole вечером: ученицы на пилонах, зеркало и окна во всю стену" fetchpriority="high"></figure>
   <ul class="fakty">
-    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg><span>Боровая ул., 116, 3 этаж, офис 312</span></li>
+    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg><a class="fakt-ssylka" href="kak-nas-najti/">Боровая ул., 116, 3 этаж, офис 312</a></li>
     <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span>Каждый день 8:00–22:00, по записи</span></li>
     <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/></svg><span>Оплата наличными или переводом</span></li>
   </ul>
@@ -71,6 +71,7 @@
       <p>Pole dance – это просто, но не легко».</p>
     </blockquote>
     <p class="pod">Добро пожаловать в Olymp Pole, студию с уникальной историей. Мы на Боровой, 116, на третьем этаже.</p>
+    <p class="studiya-ssylki"><a class="ssylka" href="o-studii/">Фото и видео с занятий <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a><a class="ssylka" href="kak-nas-najti/">Как нас найти <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></p>
   </div>
   <figure class="foto-zal rv"><img src="img/zal-piloni.webp" width="1200" height="900" loading="lazy" alt="Пилоны в зале Olymp Pole"><figcaption>Зал оборудован тремя пилонами от компании pole 4 you. Два пилона диаметром 42 мм и один 45 мм. В зале имеются татами и креш-мат. Высота пилонов 4 м. Покрытие пола: ламинат. Расположение пилонов в зале точно имитирует условия соревновательной площадки.</figcaption></figure>
 </div></section>
@@ -215,6 +216,7 @@
         <p id="itog"></p>
         <a class="btn btn--shir" id="tg-knopka" href="#" target="_blank" rel="noopener" hidden>Получать напоминания в Telegram</a>
         <p class="melko" id="tg-prim" hidden>Откроется бот студии: нажмите «Запустить», и накануне занятия придёт напоминание. Там же можно отменить запись.</p>
+        <p class="melko">Впервые к нам? На проходной скажите «На танцы» и покажите паспорт. <a class="v-tekste" href="kak-nas-najti/">Как нас найти</a></p>
         <button type="button" class="ssylka" id="snova">Записаться ещё на одно занятие</button>
       </div>
     </div>
@@ -302,7 +304,7 @@ Olymp Pole, Боровая ул., 116, 3 этаж, офис 312.
     <details><summary>Сколько человек в группе?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><p>В зале 3 пилона. В группе не больше 6 человек (по двое на пилон, по предварительной договорённости с учениками). Сколько мест осталось, видно в расписании.</p></details>
     <details><summary>Как оплатить?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><p>Наличными или переводом. Разовые и персональные занятия и аренда оплачиваются заранее, за 24 часа до начала. Абонемент можно купить на занятии.</p></details>
     <details><summary>Не получается прийти. Что делать?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><p>Отмените запись минимум за 6 часов до начала занятия, иначе оплата сгорает. Если включили напоминания, нажмите «Не смогу» в боте. Или напишите студии во ВКонтакте или Telegram. Место освободится для другого человека.</p></details>
-    <details><summary>Как найти студию?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><p>Боровая улица, 116, третий этаж, офис 312. Карта ниже.</p></details>
+    <details><summary>Как найти студию?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><p>Боровая улица, 116, третий этаж, офис 312. Видео маршрута от Боровой и от Лиговского, подсказка для проходной и парковка на странице <a class="v-tekste" href="kak-nas-najti/">«Как нас найти»</a>. Карта ниже.</p></details>
   </div>
 </div></section>
 
@@ -311,7 +313,7 @@ Olymp Pole, Боровая ул., 116, 3 этаж, офис 312.
   <div class="wrap">
     <h2>Olymp Pole</h2>
     <dl>
-      <div><dt>Адрес</dt><dd>Санкт-Петербург, Боровая ул., 116<br>3 этаж, офис 312</dd></div>
+      <div><dt>Адрес</dt><dd>Санкт-Петербург, Боровая ул., 116<br>3 этаж, офис 312<br><a href="kak-nas-najti/">Как нас найти</a></dd></div>
       <div><dt>Часы</dt><dd>Каждый день 8:00–22:00<br>по предварительной записи</dd></div>
       <div><dt>Телефон</dt><dd><a href="tel:+79602408032">+7 960 240-80-32</a></dd></div>
       <div><dt>Почта</dt><dd><a href="mailto:Olymp.pole@mail.ru">Olymp.pole@mail.ru</a></dd></div>
@@ -337,7 +339,7 @@ Olymp Pole, Боровая ул., 116, 3 этаж, офис 312.
       <p>Студия танца на пилоне<br>Санкт-Петербург, Боровая ул., 116<br>3 этаж, офис 312</p>
     </div>
     <nav aria-label="Разделы сайта"><p class="podval-zag">Разделы</p>
-      <a href="#urovni">Уровни</a><a href="#raspisanie">Расписание и запись</a><a href="#ceny">Цены и абонементы</a><a href="#trenery">Тренеры</a><a href="https://sofiatitova.getcourse.ru/page5" target="_blank" rel="noopener">Онлайн-курсы</a>
+      <a href="#urovni">Уровни</a><a href="#raspisanie">Расписание и запись</a><a href="#ceny">Цены и абонементы</a><a href="#trenery">Тренеры</a><a href="o-studii/">О студии</a><a href="kak-nas-najti/">Как нас найти</a><a href="https://sofiatitova.getcourse.ru/page5" target="_blank" rel="noopener">Онлайн-курсы</a>
     </nav>
     <div><p class="podval-zag">Связь</p>
       <a href="tel:+79602408032">+7 960 240-80-32</a><a href="mailto:Olymp.pole@mail.ru">Olymp.pole@mail.ru</a><a href="https://vk.ru/olymppole" target="_blank" rel="noopener">ВКонтакте</a><a href="https://t.me/olymp_pole" target="_blank" rel="noopener">Telegram</a><a href="https://www.instagram.com/olymp_pole" target="_blank" rel="noopener">Instagram*</a>
@@ -386,6 +388,6 @@ Olymp Pole, Боровая ул., 116, 3 этаж, офис 312.
 
 <div class="lipkaya" id="lipkaya"><a class="btn btn--shir" href="#raspisanie">Записаться на занятие</a></div>
 
-<script src="app.js?v=20261127yc"></script>
+<script src="app.js?v=20261128s"></script>
 </body>
 </html>
